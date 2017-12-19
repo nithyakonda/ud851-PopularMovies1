@@ -6,9 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.udacity.nkonda.popularmovies.R;
+import com.udacity.nkonda.popularmovies.data.Movie;
+
+import java.util.List;
 
 /**
  * Created by nkonda on 12/13/17.
@@ -16,7 +20,14 @@ import com.udacity.nkonda.popularmovies.R;
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MoviePosterViewHolder>{
 
+    private final static String TMDB_BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w185";
+
     private Context mContext;
+    private List<Movie> mMovies;
+
+    public MovieListAdapter(List<Movie> movies) {
+        mMovies = movies;
+    }
 
     @Override
     public MoviePosterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -28,12 +39,12 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
 
     @Override
     public void onBindViewHolder(MoviePosterViewHolder holder, int position) {
-        holder.bind(mContext);
+        holder.bind(mContext, position);
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return mMovies.size();
     }
 
     public class MoviePosterViewHolder extends RecyclerView.ViewHolder {
@@ -45,8 +56,9 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
             ivThumbnail = itemView.findViewById(R.id.iv_thumbnail);
         }
 
-        public void bind(Context context) {
-            Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(ivThumbnail);
+        public void bind(Context context, int position) {
+            Movie movie = mMovies.get(position);
+            Picasso.with(context).load(TMDB_BASE_IMAGE_URL + movie.getPosterPath()).into(ivThumbnail);
         }
     }
 }
