@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import com.udacity.nkonda.popularmovies.BuildConfig;
 import com.udacity.nkonda.popularmovies.constants.SortOrder;
 import com.udacity.nkonda.popularmovies.data.Movie;
+import com.udacity.nkonda.popularmovies.data.MovieDetails;
 import com.udacity.nkonda.popularmovies.utils.NetworkHelper;
 
 import org.json.JSONArray;
@@ -33,8 +34,9 @@ public class MoviesRepository implements MoviesDataSource {
 
     private final static String API_KEY = BuildConfig.API_KEY;
 
-    private final static String TMDB_POPULAR_MOVIES_URL = "https://api.themoviedb.org/3/movie/popular";
-    private final static String TMDB_TOP_RATED_MOVIES_URL = "https://api.themoviedb.org/3/movie/top_rated";
+    private final static String TMDB_BASE_MOVIES_URL = "https://api.themoviedb.org/3/movie";
+    private final static String TMDB_POPULAR_MOVIES_URL = TMDB_BASE_MOVIES_URL + "/popular";
+    private final static String TMDB_TOP_RATED_MOVIES_URL = TMDB_BASE_MOVIES_URL + "/top_rated";
 
     private static String PARAM_API_KEY = "api_key";
 
@@ -51,7 +53,7 @@ public class MoviesRepository implements MoviesDataSource {
     }
 
     @Override
-    public void getMovies(SortOrder sortOrder, @NonNull final LoadMoviesCallback callback) {
+    public void getMovies(SortOrder sortOrder, @NonNull final GetMoviesCallback callback) {
         URL getMoviesUrl = getUrl(sortOrder);
         new HttpRequestTask(new OnHttpResponseListener() {
             @Override
@@ -59,15 +61,35 @@ public class MoviesRepository implements MoviesDataSource {
                 if (httpResponse == null) {
                     callback.onDataNotAvailable();
                 } else {
-                    callback.onMoviesLoaded(parseMoviesListJson(httpResponse));
+                    List<Movie> movies = parseMoviesListJson(httpResponse);
+                    if (movies.isEmpty()) {
+                        callback.onDataNotAvailable();
+                    } else {
+                        callback.onMoviesLoaded(movies);
+                    }
                 }
             }
         }).execute(getMoviesUrl);
     }
 
     @Override
-    public void getMovie(@NonNull int movieId, @NonNull GetMovieCallback callback) {
-
+    public void getMovieDetails(@NonNull int movieId, @NonNull final GetMovieDetailsCallback callback) {
+        URL getMovieDetailsUrl = getUrl(movieId);
+        new HttpRequestTask(new OnHttpResponseListener() {
+            @Override
+            public void onReceive(String httpResponse) {
+                if (httpResponse == null) {
+                    callback.onDataNotAvailable();
+                } else {
+                    MovieDetails movieDetails = parseMovieDetailsJson(httpResponse);
+                    if (movieDetails == null) {
+                        callback.onDataNotAvailable();
+                    } else {
+                        callback.onMovieDetailsLoaded(movieDetails);
+                    }
+                }
+            }
+        }).execute(getMovieDetailsUrl);
     }
 
     // Helper methods
@@ -92,9 +114,16 @@ public class MoviesRepository implements MoviesDataSource {
         }
     }
 
-    public URL getUrl(SortOrder sortOrder) {
+    private URL getUrl (int movieId) {
+        String getMovieDetailsUrl = TMDB_BASE_MOVIES_URL + "/" + String.valueOf(movieId);
+        Uri uri = Uri.parse(getMovieDetailsUrl).buildUpon()
+                .appendQueryParameter(PARAM_API_KEY, API_KEY)
+                .build();
+        return convertUriToUrl(uri);
+    }
+
+    private URL getUrl(SortOrder sortOrder) {
         Uri uri = null;
-        URL url = null;
         switch (sortOrder) {
             case Popular:
                 uri = Uri.parse(TMDB_POPULAR_MOVIES_URL).buildUpon()
@@ -107,6 +136,11 @@ public class MoviesRepository implements MoviesDataSource {
                         .build();
                 break;
         }
+        return convertUriToUrl(uri);
+    }
+
+    private URL convertUriToUrl(Uri uri) {
+        URL url = null;
         try {
             url = new URL(uri.toString());
         } catch (MalformedURLException e) {
@@ -135,6 +169,23 @@ public class MoviesRepository implements MoviesDataSource {
             e.printStackTrace();
         }
         return movies;
+    }
+
+    private MovieDetails parseMovieDetailsJson(String movieDetailsJsonStr) {
+        MovieDetails movieDetails = null;
+        try {
+            JSONObject movieDetailsJson = new JSONObject(movieDetailsJsonStr);
+            movieDetails = new MovieDetails(
+                    movieDetailsJson.getString("original_title"),
+                    movieDetailsJson.getString("poster_path"),
+                    movieDetailsJson.getString("overview"),
+                    movieDetailsJson.getDouble("vote_average"),
+                    movieDetailsJson.getString("release_date")
+            );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return movieDetails;
     }
 
     // Async Task

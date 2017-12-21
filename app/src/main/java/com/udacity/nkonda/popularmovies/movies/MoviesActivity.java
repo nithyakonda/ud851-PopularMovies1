@@ -15,6 +15,7 @@ import com.udacity.nkonda.popularmovies.R;
 import com.udacity.nkonda.popularmovies.adapters.MovieListAdapter;
 import com.udacity.nkonda.popularmovies.constants.SortOrder;
 import com.udacity.nkonda.popularmovies.data.Movie;
+import com.udacity.nkonda.popularmovies.data.MovieDetails;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
 
 import java.util.List;
@@ -46,7 +47,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
         mAdapter.setOnItemClickedListener(new MovieListAdapter.OnItemClickedListener() {
             @Override
             public void onClick(int position) {
-                Log.d(TAG, "Selected " + mMovies.get(position).toString());
+                mMoviesPresenter.onMovieSelected(mMovies.get(position).getId());
             }
         });
         mRvMovieList.setAdapter(mAdapter);
@@ -96,5 +97,10 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
     @Override
     public void showError(String errorMsg) {
         Log.e(TAG, "Network error");
+    }
+
+    @Override
+    public void showMovieDetails(MovieDetails movieDetails) {
+        Log.d(TAG, movieDetails.toString());
     }
 }

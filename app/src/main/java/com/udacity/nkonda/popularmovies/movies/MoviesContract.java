@@ -3,6 +3,7 @@ package com.udacity.nkonda.popularmovies.movies;
 import com.udacity.nkonda.popularmovies.BasePresenter;
 import com.udacity.nkonda.popularmovies.constants.SortOrder;
 import com.udacity.nkonda.popularmovies.data.Movie;
+import com.udacity.nkonda.popularmovies.data.MovieDetails;
 
 import java.util.List;
 
@@ -20,6 +21,8 @@ public interface MoviesContract {
         void showResults(List<Movie> popularMovies);
 
         void showError(String errorMsg);
+
+        void showMovieDetails(MovieDetails movieDetails);
     }
 
     interface Presenter extends BasePresenter {
@@ -30,6 +33,6 @@ public interface MoviesContract {
 
         void onScrolledToEnd();
 
-        void onMovieSelected();
+        void onMovieSelected(int movieId);
     }
 }

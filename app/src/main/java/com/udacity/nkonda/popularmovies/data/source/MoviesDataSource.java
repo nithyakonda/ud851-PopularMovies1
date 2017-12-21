@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.udacity.nkonda.popularmovies.constants.SortOrder;
 import com.udacity.nkonda.popularmovies.data.Movie;
+import com.udacity.nkonda.popularmovies.data.MovieDetails;
 
 import java.util.List;
 
@@ -13,21 +14,21 @@ import java.util.List;
 
 public interface MoviesDataSource {
 
-    interface LoadMoviesCallback {
+    interface GetMoviesCallback {
 
         void onMoviesLoaded(List<Movie> movies);
 
         void onDataNotAvailable();
     }
 
-    interface GetMovieCallback {
+    interface GetMovieDetailsCallback {
 
-        void onMovieLoaded(Movie movie);
+        void onMovieDetailsLoaded(MovieDetails movieDetails);
 
         void onDataNotAvailable();
     }
 
-    void getMovies(SortOrder sortOrder, @NonNull LoadMoviesCallback callback);
+    void getMovies(SortOrder sortOrder, @NonNull GetMoviesCallback callback);
 
-    void getMovie(@NonNull int movieId, @NonNull GetMovieCallback callback);
+    void getMovieDetails(@NonNull int movieId, @NonNull GetMovieDetailsCallback callback);
 }
