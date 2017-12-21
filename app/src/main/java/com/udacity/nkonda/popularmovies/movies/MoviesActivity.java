@@ -26,7 +26,10 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
     // TODO: 12/19/17 Replace ProgressDialog with swipe refresh layout
     ProgressDialog mDialog;
 
+    MovieListAdapter mAdapter;
     MoviesPresenter mMoviesPresenter;
+
+    List<Movie> mMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,15 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
         mRvMovieList.setLayoutManager(layoutManager);
+
+        mAdapter = new MovieListAdapter();
+        mAdapter.setOnItemClickedListener(new MovieListAdapter.OnItemClickedListener() {
+            @Override
+            public void onClick(int position) {
+                Log.d(TAG, "Selected " + mMovies.get(position).toString());
+            }
+        });
+        mRvMovieList.setAdapter(mAdapter);
 
         mMoviesPresenter = new MoviesPresenter(MoviesRepository.getInstance(), this);
         mMoviesPresenter.load(SortOrder.Popular);
@@ -75,15 +87,14 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
     }
 
     @Override
-    public void showResults(List<Movie> movies) {
-        MovieListAdapter adapter = new MovieListAdapter(movies);
-        mRvMovieList.setAdapter(adapter);
+    public void showResults(final List<Movie> movies) {
+        mMovies = movies;
+        mAdapter.setItems(mMovies);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void showError(String errorMsg) {
         Log.e(TAG, "Network error");
     }
-
-    // UI helper methods
 }

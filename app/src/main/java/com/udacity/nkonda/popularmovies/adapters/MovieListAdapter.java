@@ -23,10 +23,19 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     private final static String TMDB_BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w185";
 
     private Context mContext;
+    private OnItemClickedListener mListener;
+
     private List<Movie> mMovies;
 
-    public MovieListAdapter(List<Movie> movies) {
+    public MovieListAdapter() {
+    }
+
+    public void setItems(List<Movie> movies) {
         mMovies = movies;
+    }
+
+    public void setOnItemClickedListener(OnItemClickedListener listener) {
+        mListener = listener;
     }
 
     @Override
@@ -44,21 +53,34 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
 
     @Override
     public int getItemCount() {
-        return mMovies.size();
+        return mMovies == null ? 0 : mMovies.size();
     }
 
-    public class MoviePosterViewHolder extends RecyclerView.ViewHolder {
+    public class MoviePosterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         ImageView ivThumbnail;
 
         public MoviePosterViewHolder(View itemView) {
             super(itemView);
             ivThumbnail = itemView.findViewById(R.id.iv_thumbnail);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Context context, int position) {
             Movie movie = mMovies.get(position);
             Picasso.with(context).load(TMDB_BASE_IMAGE_URL + movie.getPosterPath()).into(ivThumbnail);
         }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            if (mListener != null) {
+                mListener.onClick(position);
+            }
+        }
+    }
+
+    public interface OnItemClickedListener {
+        void onClick(int position);
     }
 }
