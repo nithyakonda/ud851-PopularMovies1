@@ -1,9 +1,7 @@
 package com.udacity.nkonda.popularmovies.movies;
 
-import android.support.annotation.NonNull;
-
 import com.udacity.nkonda.popularmovies.BasePresenter;
-import com.udacity.nkonda.popularmovies.BaseView;
+import com.udacity.nkonda.popularmovies.constants.SortOrder;
 import com.udacity.nkonda.popularmovies.data.Movie;
 
 import java.util.List;
@@ -26,7 +24,9 @@ public interface MoviesContract {
 
     interface Presenter extends BasePresenter {
 
-        void load();
+        void load(SortOrder sortOrder);
+
+        void onSortOrderChanged(SortOrder sortOrder);
 
         void onScrolledToEnd();
 

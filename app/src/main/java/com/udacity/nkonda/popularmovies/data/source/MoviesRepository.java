@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.udacity.nkonda.popularmovies.BuildConfig;
+import com.udacity.nkonda.popularmovies.constants.SortOrder;
 import com.udacity.nkonda.popularmovies.data.Movie;
 import com.udacity.nkonda.popularmovies.utils.NetworkHelper;
 
@@ -32,7 +33,8 @@ public class MoviesRepository implements MoviesDataSource {
 
     private final static String API_KEY = BuildConfig.API_KEY;
 
-    private final static String TMDB_BASE_URL = "https://api.themoviedb.org/3/movie/popular";
+    private final static String TMDB_POPULAR_MOVIES_URL = "https://api.themoviedb.org/3/movie/popular";
+    private final static String TMDB_TOP_RATED_MOVIES_URL = "https://api.themoviedb.org/3/movie/top_rated";
 
     private static String PARAM_API_KEY = "api_key";
 
@@ -49,10 +51,8 @@ public class MoviesRepository implements MoviesDataSource {
     }
 
     @Override
-    public void getMovies(@NonNull final LoadMoviesCallback callback) {
-        URL getMoviesUrl = getUrl(Uri.parse(TMDB_BASE_URL).buildUpon()
-                .appendQueryParameter(PARAM_API_KEY, API_KEY)
-                .build());
+    public void getMovies(SortOrder sortOrder, @NonNull final LoadMoviesCallback callback) {
+        URL getMoviesUrl = getUrl(sortOrder);
         new HttpRequestTask(new OnHttpResponseListener() {
             @Override
             public void onReceive(String httpResponse) {
@@ -72,16 +72,6 @@ public class MoviesRepository implements MoviesDataSource {
 
     // Helper methods
     // TODO: 12/18/17 move helper methods to appropriate utils
-    private URL getUrl(Uri uri) {
-        URL url = null;
-        try {
-            url = new URL(uri.toString());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        return url;
-    }
 
     private String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -100,6 +90,29 @@ public class MoviesRepository implements MoviesDataSource {
         } finally {
             urlConnection.disconnect();
         }
+    }
+
+    public URL getUrl(SortOrder sortOrder) {
+        Uri uri = null;
+        URL url = null;
+        switch (sortOrder) {
+            case Popular:
+                uri = Uri.parse(TMDB_POPULAR_MOVIES_URL).buildUpon()
+                        .appendQueryParameter(PARAM_API_KEY, API_KEY)
+                        .build();
+                break;
+            case TopRated:
+                uri = Uri.parse(TMDB_TOP_RATED_MOVIES_URL).buildUpon()
+                        .appendQueryParameter(PARAM_API_KEY, API_KEY)
+                        .build();
+                break;
+        }
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return url;
     }
 
     private List<Movie> parseMoviesListJson(String moviesListJsonStr) {

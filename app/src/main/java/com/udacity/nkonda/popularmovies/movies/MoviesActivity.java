@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.ProgressBar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.squareup.picasso.Picasso;
 import com.udacity.nkonda.popularmovies.R;
 import com.udacity.nkonda.popularmovies.adapters.MovieListAdapter;
+import com.udacity.nkonda.popularmovies.constants.SortOrder;
 import com.udacity.nkonda.popularmovies.data.Movie;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
 
@@ -37,7 +40,28 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
         mRvMovieList.setLayoutManager(layoutManager);
 
         mMoviesPresenter = new MoviesPresenter(MoviesRepository.getInstance(), this);
-        mMoviesPresenter.load();
+        mMoviesPresenter.load(SortOrder.Popular);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_sort_popularity:
+                mMoviesPresenter.load(SortOrder.Popular);
+                return true;
+            case R.id.action_sort_rating:
+                mMoviesPresenter.load(SortOrder.TopRated);
+                return true;
+            default:
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

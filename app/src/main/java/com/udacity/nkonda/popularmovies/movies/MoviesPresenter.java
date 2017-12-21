@@ -18,6 +18,7 @@ package com.udacity.nkonda.popularmovies.movies;
 
 import android.support.annotation.NonNull;
 
+import com.udacity.nkonda.popularmovies.constants.SortOrder;
 import com.udacity.nkonda.popularmovies.data.Movie;
 import com.udacity.nkonda.popularmovies.data.source.MoviesDataSource;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
@@ -39,14 +40,14 @@ public class MoviesPresenter implements MoviesContract.Presenter {
 
     @Override
     public void start() {
-        load();
+        load(SortOrder.Popular);
     }
 
     @Override
-    public void load() {
+    public void load(SortOrder sortOrder) {
         mMoviesView.showProgress();
 
-        mMoviesRepository.getMovies(new MoviesDataSource.LoadMoviesCallback() {
+        mMoviesRepository.getMovies(sortOrder, new MoviesDataSource.LoadMoviesCallback() {
             @Override
             public void onMoviesLoaded(List<Movie> movies) {
                 mMoviesView.hideProgress();
@@ -58,6 +59,11 @@ public class MoviesPresenter implements MoviesContract.Presenter {
                 mMoviesView.showError("Oops! Something went wrong. Please try again later.");
             }
         });
+    }
+
+    @Override
+    public void onSortOrderChanged(SortOrder sortOrder) {
+        load(sortOrder);
     }
 
     @Override

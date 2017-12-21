@@ -2,6 +2,7 @@ package com.udacity.nkonda.popularmovies.data.source;
 
 import android.support.annotation.NonNull;
 
+import com.udacity.nkonda.popularmovies.constants.SortOrder;
 import com.udacity.nkonda.popularmovies.data.Movie;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public interface MoviesDataSource {
         void onDataNotAvailable();
     }
 
-    void getMovies(@NonNull LoadMoviesCallback callback);
+    void getMovies(SortOrder sortOrder, @NonNull LoadMoviesCallback callback);
 
     void getMovie(@NonNull int movieId, @NonNull GetMovieCallback callback);
 }
