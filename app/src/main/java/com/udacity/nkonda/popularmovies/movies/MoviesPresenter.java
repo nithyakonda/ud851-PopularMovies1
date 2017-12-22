@@ -31,8 +31,6 @@ public class MoviesPresenter implements MoviesContract.Presenter {
 
     private final MoviesContract.View mMoviesView;
 
-    private boolean mFirstLoad = true;
-
     public MoviesPresenter(@NonNull MoviesRepository moviesRepository, @NonNull MoviesContract.View moviesView) {
         mMoviesRepository = moviesRepository;
         mMoviesView = moviesView;
@@ -69,23 +67,5 @@ public class MoviesPresenter implements MoviesContract.Presenter {
     @Override
     public void onScrolledToEnd() {
         // TODO: 12/20/17 implement
-    }
-
-    @Override
-    public void onMovieSelected(int movieId) {
-        mMoviesView.showProgress();
-
-        mMoviesRepository.getMovieDetails(movieId, new MoviesDataSource.GetMovieDetailsCallback() {
-            @Override
-            public void onMovieDetailsLoaded(MovieDetails movieDetails) {
-                mMoviesView.hideProgress();
-                mMoviesView.showMovieDetails(movieDetails);
-            }
-
-            @Override
-            public void onDataNotAvailable() {
-                mMoviesView.showError("Oops! Something went wrong. Please try again later.");
-            }
-        });
     }
 }

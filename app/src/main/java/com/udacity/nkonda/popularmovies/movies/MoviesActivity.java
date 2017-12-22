@@ -1,6 +1,7 @@
 package com.udacity.nkonda.popularmovies.movies;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,11 +16,13 @@ import com.udacity.nkonda.popularmovies.R;
 import com.udacity.nkonda.popularmovies.data.Movie;
 import com.udacity.nkonda.popularmovies.data.MovieDetails;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
+import com.udacity.nkonda.popularmovies.moviedetails.MovieDetailsActivity;
 
 import java.util.List;
 
 public class MoviesActivity extends AppCompatActivity implements MoviesContract.View{
     private static final String TAG = "PM_MoviesActivity";
+    private static final String PARAM_MOVIE_ID = "PARAM_MOVIE_ID";
 
     RecyclerView mRvMovieList;
     // TODO: 12/19/17 Replace ProgressDialog with swipe refresh layout
@@ -45,7 +48,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
         mAdapter.setOnItemClickedListener(new MovieListAdapter.OnItemClickedListener() {
             @Override
             public void onClick(int position) {
-                mMoviesPresenter.onMovieSelected(mMovies.get(position).getId());
+                startMovieDetailsActivity(mMovies.get(position).getId());
             }
         });
         mRvMovieList.setAdapter(mAdapter);
@@ -94,11 +97,14 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
 
     @Override
     public void showError(String errorMsg) {
-        Log.e(TAG, "Network error");
+        // TODO: 12/21/17 add alert dialog to show error
+        Log.e(TAG, errorMsg);
     }
 
-    @Override
-    public void showMovieDetails(MovieDetails movieDetails) {
-        Log.d(TAG, movieDetails.toString());
+    private void startMovieDetailsActivity(int movieId) {
+        Intent intent = new Intent();
+        intent.putExtra(PARAM_MOVIE_ID, movieId);
+        intent.setClass(this, MovieDetailsActivity.class);
+        startActivity(intent);
     }
 }

@@ -20,8 +20,6 @@ public interface MoviesContract {
         void showResults(List<Movie> popularMovies);
 
         void showError(String errorMsg);
-
-        void showMovieDetails(MovieDetails movieDetails);
     }
 
     interface Presenter extends BasePresenter {
@@ -31,7 +29,5 @@ public interface MoviesContract {
         void onSortOrderChanged(SortOrder sortOrder);
 
         void onScrolledToEnd();
-
-        void onMovieSelected(int movieId);
     }
 }
