@@ -1,4 +1,4 @@
-package com.udacity.nkonda.popularmovies.constants;
+package com.udacity.nkonda.popularmovies.movies;
 
 /**
  * Created by nkonda on 12/19/17.

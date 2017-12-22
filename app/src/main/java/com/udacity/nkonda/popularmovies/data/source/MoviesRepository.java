@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.udacity.nkonda.popularmovies.BuildConfig;
-import com.udacity.nkonda.popularmovies.constants.SortOrder;
+import com.udacity.nkonda.popularmovies.movies.SortOrder;
 import com.udacity.nkonda.popularmovies.data.Movie;
 import com.udacity.nkonda.popularmovies.data.MovieDetails;
 import com.udacity.nkonda.popularmovies.utils.NetworkHelper;

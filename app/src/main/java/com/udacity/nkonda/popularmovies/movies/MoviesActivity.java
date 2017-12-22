@@ -12,8 +12,6 @@ import android.view.MenuItem;
 
 import com.squareup.picasso.Picasso;
 import com.udacity.nkonda.popularmovies.R;
-import com.udacity.nkonda.popularmovies.adapters.MovieListAdapter;
-import com.udacity.nkonda.popularmovies.constants.SortOrder;
 import com.udacity.nkonda.popularmovies.data.Movie;
 import com.udacity.nkonda.popularmovies.data.MovieDetails;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
