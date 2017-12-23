@@ -72,12 +72,11 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsCo
 
     @Override
     public void showError(String errorMsg) {
-        // TODO: 12/23/17 extract strings
         mContentLayout.setVisibility(View.INVISIBLE);
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle(R.string.str_error_dialog_title)
+                .setTitle(R.string.error_dialog_title)
                 .setMessage(errorMsg)
-                .setPositiveButton(getString(R.string.str_error_dialog_button_label),
+                .setPositiveButton(getString(R.string.error_dialog_button_label),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

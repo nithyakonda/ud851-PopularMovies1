@@ -20,12 +20,16 @@ public interface MoviesContract {
 
         void showResults(List<Movie> popularMovies, int totalPages);
 
+        void showMovieDetails(int movieId);
+
         void showError(String errorMsg);
     }
 
     interface Presenter extends BasePresenter<State> {
 
         void load();
+
+        void onMovieSelected(int position);
 
         void onSortOrderChanged(SortOrder sortOrder);
 

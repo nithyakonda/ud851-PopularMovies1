@@ -29,15 +29,16 @@ public class MoviesPresenter implements MoviesContract.Presenter {
     private static final SortOrder mDefaultSortOrder = SortOrder.Popular;
     private static final int mDefaultPageNumber = 1;
 
-    private final MoviesRepository mMoviesRepository;
+    private static int mLastPageNumber = mDefaultPageNumber;
+    private static SortOrder mLastSortOrder = mDefaultSortOrder;
+    private static List<Movie> mMovies;
+
+    private final MoviesRepository mRepository;
 
     private final MoviesContract.View mView;
 
-    private static int mLastPageNumber = mDefaultPageNumber;
-    private static SortOrder mLastSortOrder = mDefaultSortOrder;
-
-    public MoviesPresenter(@NonNull MoviesRepository moviesRepository, @NonNull MoviesContract.View view) {
-        mMoviesRepository = moviesRepository;
+    public MoviesPresenter(@NonNull MoviesRepository repository, @NonNull MoviesContract.View view) {
+        mRepository = repository;
         mView = view;
     }
 
@@ -60,11 +61,12 @@ public class MoviesPresenter implements MoviesContract.Presenter {
         if (mView.isOnline()) {
             mView.showProgress();
 
-            mMoviesRepository.getMovies(mLastSortOrder, mLastPageNumber, new MoviesDataSource.GetMoviesCallback() {
+            mRepository.getMovies(mLastSortOrder, mLastPageNumber, new MoviesDataSource.GetMoviesCallback() {
                 @Override
                 public void onMoviesLoaded(List<Movie> movies, int totalPages) {
+                    mMovies = movies;
                     mView.hideProgress();
-                    mView.showResults(movies, totalPages);
+                    mView.showResults(mMovies, totalPages);
                 }
 
                 @Override
@@ -75,6 +77,11 @@ public class MoviesPresenter implements MoviesContract.Presenter {
         } else {
             mView.showError("You are not connected to the internet");
         }
+    }
+
+    @Override
+    public void onMovieSelected(int position) {
+        mView.showMovieDetails(mMovies.get(position).getId());
     }
 
     @Override

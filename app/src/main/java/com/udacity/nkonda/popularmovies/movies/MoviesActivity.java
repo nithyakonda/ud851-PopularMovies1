@@ -6,11 +6,9 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,7 +16,6 @@ import android.view.MenuItem;
 import com.github.rafaelcrz.android_endless_scroll_lib.ScrollEndless;
 import com.squareup.picasso.Picasso;
 import com.udacity.nkonda.popularmovies.BaseActivity;
-import com.udacity.nkonda.popularmovies.BaseState;
 import com.udacity.nkonda.popularmovies.R;
 import com.udacity.nkonda.popularmovies.data.Movie;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
@@ -41,9 +38,6 @@ public class MoviesActivity extends BaseActivity implements MoviesContract.View{
     private MovieListAdapter mAdapter;
     private MoviesPresenter mPresenter;
 
-    // TODO: 12/23/17 shouldn't be saving list here move to presenter
-    private List<Movie> mMovies;
-
     @Override
     protected void onCreate(Bundle inState) {
         super.onCreate(inState);
@@ -64,7 +58,7 @@ public class MoviesActivity extends BaseActivity implements MoviesContract.View{
         mAdapter.setOnItemClickedListener(new MovieListAdapter.OnItemClickedListener() {
             @Override
             public void onClick(int position) {
-                startMovieDetailsActivity(mMovies.get(position).getId());
+                mPresenter.onMovieSelected(position);
             }
         });
         mRvMovieList.setAdapter(mAdapter);
@@ -158,18 +152,24 @@ public class MoviesActivity extends BaseActivity implements MoviesContract.View{
     @Override
     public void showResults(final List<Movie> movies, int totalPages) {
         mEndlessScroll.setTotalPage(totalPages);
-        mMovies = movies;
-        mAdapter.setItems(mMovies);
+        mAdapter.setItems(movies);
         mAdapter.notifyDataSetChanged();
     }
 
     @Override
+    public void showMovieDetails(int movieId) {
+        Intent intent = new Intent();
+        intent.putExtra(PARAM_MOVIE_ID, movieId);
+        intent.setClass(this, MovieDetailsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
     public void showError(String errorMsg) {
-        // TODO: 12/23/17 extract strings
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle(R.string.str_error_dialog_title)
+                .setTitle(R.string.error_dialog_title)
                 .setMessage(errorMsg)
-                .setPositiveButton(getString(R.string.str_error_dialog_button_label),
+                .setPositiveButton(getString(R.string.error_dialog_button_label),
                         new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -177,12 +177,5 @@ public class MoviesActivity extends BaseActivity implements MoviesContract.View{
                     }
                 });
         builder.create().show();
-    }
-
-    private void startMovieDetailsActivity(int movieId) {
-        Intent intent = new Intent();
-        intent.putExtra(PARAM_MOVIE_ID, movieId);
-        intent.setClass(this, MovieDetailsActivity.class);
-        startActivity(intent);
     }
 }
