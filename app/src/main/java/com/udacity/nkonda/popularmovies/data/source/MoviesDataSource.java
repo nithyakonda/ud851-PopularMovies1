@@ -28,7 +28,7 @@ public interface MoviesDataSource {
         void onDataNotAvailable();
     }
 
-    void getMovies(SortOrder sortOrder, @NonNull GetMoviesCallback callback);
+    void getMovies(SortOrder sortOrder, int pageNo, @NonNull GetMoviesCallback callback);
 
     void getMovieDetails(@NonNull int movieId, @NonNull GetMovieDetailsCallback callback);
 }

@@ -33,8 +33,8 @@ public class MoviesRepository implements MoviesDataSource {
     }
 
     @Override
-    public void getMovies(SortOrder sortOrder, @NonNull final GetMoviesCallback callback) {
-        URL getMoviesUrl = mNetworkHelper.getUrl(sortOrder);
+    public void getMovies(SortOrder sortOrder, int pageNo, @NonNull final GetMoviesCallback callback) {
+        URL getMoviesUrl = mNetworkHelper.getUrl(sortOrder, pageNo);
         mNetworkHelper.startHttpRequestTask(getMoviesUrl,
             new NetworkHelper.OnHttpResponseListener() {
                 @Override

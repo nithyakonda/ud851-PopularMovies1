@@ -28,7 +28,9 @@ public interface MoviesContract {
 
         void onSortOrderChanged(SortOrder sortOrder);
 
-        void onScrolledToEnd();
+        void onScrolledToTop();
+
+        void onScrolledToBottom();
     }
 
     interface State extends BaseState {

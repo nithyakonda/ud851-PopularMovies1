@@ -60,7 +60,7 @@ public class MoviesPresenter implements MoviesContract.Presenter {
     public void load() {
         mMoviesView.showProgress();
 
-        mMoviesRepository.getMovies(mLastSortOrder, new MoviesDataSource.GetMoviesCallback() {
+        mMoviesRepository.getMovies(mLastSortOrder, mLastPageNumber, new MoviesDataSource.GetMoviesCallback() {
             @Override
             public void onMoviesLoaded(List<Movie> movies) {
                 mMoviesView.hideProgress();
@@ -81,7 +81,16 @@ public class MoviesPresenter implements MoviesContract.Presenter {
     }
 
     @Override
-    public void onScrolledToEnd() {
-        // TODO: 12/20/17 implement
+    public void onScrolledToTop() {
+        if (mLastPageNumber > 1) {
+            mLastPageNumber--;
+            load();
+        }
+    }
+
+    @Override
+    public void onScrolledToBottom() {
+        mLastPageNumber++;
+        load();
     }
 }

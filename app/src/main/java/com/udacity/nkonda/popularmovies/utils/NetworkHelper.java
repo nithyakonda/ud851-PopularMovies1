@@ -42,6 +42,7 @@ public class NetworkHelper {
     private final static String TMDB_BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w185";
 
     private final static String PARAM_API_KEY = "api_key";
+    private final static String PARAM_PAGE = "page";
     private static NetworkHelper INSTANCE;
 
     private NetworkHelper() {}
@@ -65,20 +66,21 @@ public class NetworkHelper {
         return convertUriToUrl(uri);
     }
 
-    public URL getUrl(SortOrder sortOrder) {
+    public URL getUrl(SortOrder sortOrder, int page) {
         Uri uri = null;
+        String baseUrl = null;
         switch (sortOrder) {
             case Popular:
-                uri = Uri.parse(TMDB_POPULAR_MOVIES_URL).buildUpon()
-                        .appendQueryParameter(PARAM_API_KEY, API_KEY)
-                        .build();
+                baseUrl = TMDB_POPULAR_MOVIES_URL;
                 break;
             case TopRated:
-                uri = Uri.parse(TMDB_TOP_RATED_MOVIES_URL).buildUpon()
-                        .appendQueryParameter(PARAM_API_KEY, API_KEY)
-                        .build();
+                baseUrl = TMDB_TOP_RATED_MOVIES_URL;
                 break;
         }
+        uri = Uri.parse(baseUrl).buildUpon()
+                .appendQueryParameter(PARAM_API_KEY, API_KEY)
+                .appendQueryParameter(PARAM_PAGE, String.valueOf(page))
+                .build();
         return convertUriToUrl(uri);
     }
 
