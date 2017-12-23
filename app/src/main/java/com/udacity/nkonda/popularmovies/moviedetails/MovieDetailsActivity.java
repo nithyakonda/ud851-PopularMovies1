@@ -3,6 +3,7 @@ package com.udacity.nkonda.popularmovies.moviedetails;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
         mTvReleaseDate = findViewById(R.id.tv_release_date);
         mTvRating = findViewById(R.id.tv_rating);
         mTvPlotSynopsis = findViewById(R.id.tv_plot_synopsis);
+        mTvPlotSynopsis.setMovementMethod(new ScrollingMovementMethod());
 
         mPresenter = new MovieDetailsPresenter(MoviesRepository.getInstance(), this);
 

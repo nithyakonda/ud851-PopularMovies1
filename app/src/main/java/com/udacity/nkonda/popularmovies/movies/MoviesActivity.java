@@ -2,6 +2,7 @@ package com.udacity.nkonda.popularmovies.movies;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -37,10 +38,15 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Picasso.with(this).setLoggingEnabled(true);
-        mRvMovieList = (RecyclerView) findViewById(R.id.rv_movie_list);
+        mRvMovieList = findViewById(R.id.rv_movie_list);
         mDialog = new ProgressDialog(this);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
+        RecyclerView.LayoutManager layoutManager = null;
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            layoutManager = new GridLayoutManager(this, 5);
+        } else {
+            layoutManager = new GridLayoutManager(this, 3);
+        }
         mRvMovieList.setLayoutManager(layoutManager);
 
         mAdapter = new MovieListAdapter();
