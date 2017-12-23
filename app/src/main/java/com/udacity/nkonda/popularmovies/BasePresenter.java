@@ -20,7 +20,6 @@ public interface BasePresenter<S extends BaseState> {
 
     void start(S state);
 
-    // TODO: 12/23/17 add unsubscribe
     S getState();
 
 }

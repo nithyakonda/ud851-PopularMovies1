@@ -1,9 +1,11 @@
 package com.udacity.nkonda.popularmovies.movies;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +17,8 @@ import android.view.MenuItem;
 
 import com.github.rafaelcrz.android_endless_scroll_lib.ScrollEndless;
 import com.squareup.picasso.Picasso;
+import com.udacity.nkonda.popularmovies.BaseActivity;
+import com.udacity.nkonda.popularmovies.BaseState;
 import com.udacity.nkonda.popularmovies.R;
 import com.udacity.nkonda.popularmovies.data.Movie;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
@@ -22,7 +26,7 @@ import com.udacity.nkonda.popularmovies.moviedetails.MovieDetailsActivity;
 
 import java.util.List;
 
-public class MoviesActivity extends AppCompatActivity implements MoviesContract.View{
+public class MoviesActivity extends BaseActivity implements MoviesContract.View{
     private static final String TAG = "PM_MoviesActivity";
     private static final String PARAM_MOVIE_ID = "PARAM_MOVIE_ID";
     private static final String SAVEKEY_LAST_PAGE_NUMBER = "SAVEKEY_LAST_PAGE_NUMBER";
@@ -78,21 +82,6 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
 
             }
         });
-//        mRvMovieList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//            }
-//
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                if (!recyclerView.canScrollVertically(-1)) {
-//                    mPresenter.onScrolledToTop();
-//                } else if (!recyclerView.canScrollVertically(1)) {
-//                    mPresenter.onScrolledToBottom();
-//                }
-//            }
-//        });
 
         mSrlMovies.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -128,7 +117,6 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
     @Override
     protected void onStop() {
         super.onStop();
-        // TODO: 12/23/17 unsubscribe
     }
 
     @Override
@@ -177,8 +165,18 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
 
     @Override
     public void showError(String errorMsg) {
-        // TODO: 12/21/17 add alert dialog to show error
-        Log.e(TAG, errorMsg);
+        // TODO: 12/23/17 extract strings
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle(R.string.str_error_dialog_title)
+                .setMessage(errorMsg)
+                .setPositiveButton(getString(R.string.str_error_dialog_button_label),
+                        new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mPresenter.load();
+                    }
+                });
+        builder.create().show();
     }
 
     private void startMovieDetailsActivity(int movieId) {

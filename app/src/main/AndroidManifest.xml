@@ -3,6 +3,7 @@
           package="com.udacity.nkonda.popularmovies">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -18,10 +19,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".moviedetails.MovieDetailsActivity"
+        <activity
+            android:name=".moviedetails.MovieDetailsActivity"
             android:parentActivityName=".movies.MoviesActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                       android:value=".movies.MoviesActivity"/>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".movies.MoviesActivity"/>
+        </activity>
+        <activity android:name=".BaseActivity">
         </activity>
     </application>
 

@@ -2,6 +2,7 @@ package com.udacity.nkonda.popularmovies.movies;
 
 import com.udacity.nkonda.popularmovies.BasePresenter;
 import com.udacity.nkonda.popularmovies.BaseState;
+import com.udacity.nkonda.popularmovies.BaseView;
 import com.udacity.nkonda.popularmovies.data.Movie;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  */
 
 public interface MoviesContract {
-    interface View {
+    interface View extends BaseView{
 
         void showProgress();
 

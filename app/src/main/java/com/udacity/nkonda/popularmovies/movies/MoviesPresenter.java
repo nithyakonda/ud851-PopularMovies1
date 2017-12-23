@@ -18,7 +18,6 @@ package com.udacity.nkonda.popularmovies.movies;
 
 import android.support.annotation.NonNull;
 
-import com.udacity.nkonda.popularmovies.BaseState;
 import com.udacity.nkonda.popularmovies.data.Movie;
 import com.udacity.nkonda.popularmovies.data.source.MoviesDataSource;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
@@ -32,14 +31,14 @@ public class MoviesPresenter implements MoviesContract.Presenter {
 
     private final MoviesRepository mMoviesRepository;
 
-    private final MoviesContract.View mMoviesView;
+    private final MoviesContract.View mView;
 
     private static int mLastPageNumber = mDefaultPageNumber;
     private static SortOrder mLastSortOrder = mDefaultSortOrder;
 
-    public MoviesPresenter(@NonNull MoviesRepository moviesRepository, @NonNull MoviesContract.View moviesView) {
+    public MoviesPresenter(@NonNull MoviesRepository moviesRepository, @NonNull MoviesContract.View view) {
         mMoviesRepository = moviesRepository;
-        mMoviesView = moviesView;
+        mView = view;
     }
 
     @Override
@@ -58,20 +57,24 @@ public class MoviesPresenter implements MoviesContract.Presenter {
 
     @Override
     public void load() {
-        mMoviesView.showProgress();
+        if (mView.isOnline()) {
+            mView.showProgress();
 
-        mMoviesRepository.getMovies(mLastSortOrder, mLastPageNumber, new MoviesDataSource.GetMoviesCallback() {
-            @Override
-            public void onMoviesLoaded(List<Movie> movies, int totalPages) {
-                mMoviesView.hideProgress();
-                mMoviesView.showResults(movies, totalPages);
-            }
+            mMoviesRepository.getMovies(mLastSortOrder, mLastPageNumber, new MoviesDataSource.GetMoviesCallback() {
+                @Override
+                public void onMoviesLoaded(List<Movie> movies, int totalPages) {
+                    mView.hideProgress();
+                    mView.showResults(movies, totalPages);
+                }
 
-            @Override
-            public void onDataNotAvailable() {
-                mMoviesView.showError("Oops! Something went wrong. Please try again later.");
-            }
-        });
+                @Override
+                public void onDataNotAvailable() {
+                    mView.showError("Something went wrong.");
+                }
+            });
+        } else {
+            mView.showError("You are not connected to the internet");
+        }
     }
 
     @Override

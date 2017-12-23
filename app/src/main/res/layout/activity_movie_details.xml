@@ -1,83 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="15dp"
     tools:context="com.udacity.nkonda.popularmovies.moviedetails.MovieDetailsActivity">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/iv_poster"
-        android:layout_weight="1"
-        android:paddingBottom="5dp"
-        android:layout_gravity="center"/>
-
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pb_indicator"
+        android:layout_gravity="center"
+        style="@style/Base.TextAppearance.AppCompat.Large"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:id="@+id/content_layout"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/iv_poster"
+            android:layout_weight="1"
+            android:paddingBottom="5dp"
+            android:layout_gravity="center"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:id="@+id/tv_original_title"
-                android:layout_marginTop="5dp"
-                app:autoSizeTextType="uniform"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                tools:text="Sample Title "/>
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/tv_original_title"
+                    android:layout_marginTop="5dp"
+                    app:autoSizeTextType="uniform"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    tools:text="Sample Title "/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginRight="5dp"
-                android:src="@android:drawable/star_big_off"
-                android:tint="@android:color/holo_orange_dark"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginRight="5dp"
+                    android:src="@android:drawable/star_big_off"
+                    android:tint="@android:color/holo_orange_dark"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:id="@+id/tv_rating"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    tools:text="7"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:text="/10"/>
+            </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:id="@+id/tv_rating"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                tools:text="7"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_release_date"
+                android:paddingBottom="5dp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:text="/10"/>
+                tools:text="Release Date"/>
+
+            <TextView
+                android:id="@+id/tv_plot_synopsis"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:scrollbars="vertical"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."/>
         </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_release_date"
-            android:paddingBottom="5dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            tools:text="Release Date"/>
-
-        <TextView
-            android:id="@+id/tv_plot_synopsis"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:scrollbars="vertical"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."/>
-
     </LinearLayout>
-
-</LinearLayout>
+</FrameLayout>

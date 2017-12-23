@@ -32,19 +32,23 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter {
 
     @Override
     public void load(int movieId) {
-        mView.showProgress();
+        if (mView.isOnline()) {
+            mView.showProgress();
 
-        mRepository.getMovieDetails(movieId, new MoviesDataSource.GetMovieDetailsCallback() {
-            @Override
-            public void onMovieDetailsLoaded(MovieDetails movieDetails) {
-                mView.hideProgress();
-                mView.showMovieDetails(movieDetails);
-            }
+            mRepository.getMovieDetails(movieId, new MoviesDataSource.GetMovieDetailsCallback() {
+                @Override
+                public void onMovieDetailsLoaded(MovieDetails movieDetails) {
+                    mView.hideProgress();
+                    mView.showMovieDetails(movieDetails);
+                }
 
-            @Override
-            public void onDataNotAvailable() {
-                mView.showError("Oops! Something went wrong. Please try again later.");
-            }
-        });
+                @Override
+                public void onDataNotAvailable() {
+                    mView.showError("Oops! Something went wrong. Please try again later.");
+                }
+            });
+        } else {
+            mView.showError("You are not connected to the internet");
+        }
     }
 }
