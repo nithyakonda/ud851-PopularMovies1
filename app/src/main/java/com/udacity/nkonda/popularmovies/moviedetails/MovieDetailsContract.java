@@ -22,7 +22,5 @@ public interface MovieDetailsContract {
     interface Presenter extends BasePresenter {
 
         void load(int movieId);
-
-        void onBackButtonClicked();
     }
 }

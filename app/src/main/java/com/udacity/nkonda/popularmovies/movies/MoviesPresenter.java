@@ -18,6 +18,7 @@ package com.udacity.nkonda.popularmovies.movies;
 
 import android.support.annotation.NonNull;
 
+import com.udacity.nkonda.popularmovies.BaseState;
 import com.udacity.nkonda.popularmovies.data.Movie;
 import com.udacity.nkonda.popularmovies.data.source.MoviesDataSource;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
@@ -26,9 +27,15 @@ import java.util.List;
 
 public class MoviesPresenter implements MoviesContract.Presenter {
 
+    private static final SortOrder mDefaultSortOrder = SortOrder.Popular;
+    private static final int mDefaultPageNumber = 1;
+
     private final MoviesRepository mMoviesRepository;
 
     private final MoviesContract.View mMoviesView;
+
+    private static int mLastPageNumber = mDefaultPageNumber;
+    private static SortOrder mLastSortOrder = mDefaultSortOrder;
 
     public MoviesPresenter(@NonNull MoviesRepository moviesRepository, @NonNull MoviesContract.View moviesView) {
         mMoviesRepository = moviesRepository;
@@ -36,15 +43,24 @@ public class MoviesPresenter implements MoviesContract.Presenter {
     }
 
     @Override
-    public void start() {
-        load(SortOrder.Popular);
+    public void start(MoviesContract.State state) {
+        if (state != null) {
+            mLastPageNumber = state.getLastPageNumber();
+            mLastSortOrder = state.getLastSortOrder();
+        }
+        load();
     }
 
     @Override
-    public void load(SortOrder sortOrder) {
+    public MoviesContract.State getState() {
+        return new MoviesState(mLastPageNumber, mLastSortOrder);
+    }
+
+    @Override
+    public void load() {
         mMoviesView.showProgress();
 
-        mMoviesRepository.getMovies(sortOrder, new MoviesDataSource.GetMoviesCallback() {
+        mMoviesRepository.getMovies(mLastSortOrder, new MoviesDataSource.GetMoviesCallback() {
             @Override
             public void onMoviesLoaded(List<Movie> movies) {
                 mMoviesView.hideProgress();
@@ -60,7 +76,8 @@ public class MoviesPresenter implements MoviesContract.Presenter {
 
     @Override
     public void onSortOrderChanged(SortOrder sortOrder) {
-        load(sortOrder);
+        mLastSortOrder = sortOrder;
+        load();
     }
 
     @Override

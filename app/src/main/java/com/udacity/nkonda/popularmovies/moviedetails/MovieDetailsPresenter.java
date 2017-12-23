@@ -1,5 +1,6 @@
 package com.udacity.nkonda.popularmovies.moviedetails;
 
+import com.udacity.nkonda.popularmovies.BaseState;
 import com.udacity.nkonda.popularmovies.data.MovieDetails;
 import com.udacity.nkonda.popularmovies.data.source.MoviesDataSource;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
@@ -20,8 +21,13 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter {
     }
 
     @Override
-    public void start() {
-        // noop
+    public void start(BaseState state) {
+
+    }
+
+    @Override
+    public BaseState getState() {
+        return null;
     }
 
     @Override
@@ -40,10 +46,5 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter {
                 mView.showError("Oops! Something went wrong. Please try again later.");
             }
         });
-    }
-
-    @Override
-    public void onBackButtonClicked() {
-        // TODO: 12/21/17 implement
     }
 }

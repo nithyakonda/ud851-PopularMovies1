@@ -23,19 +23,23 @@ import java.util.List;
 public class MoviesActivity extends AppCompatActivity implements MoviesContract.View{
     private static final String TAG = "PM_MoviesActivity";
     private static final String PARAM_MOVIE_ID = "PARAM_MOVIE_ID";
+    private static final String SAVEKEY_LAST_PAGE_NUMBER = "SAVEKEY_LAST_PAGE_NUMBER";
+    private static final String SAVEKEY_LAST_SORT_ORDER = "SAVEKEY_LAST_SORT_ORDER";
 
     RecyclerView mRvMovieList;
     // TODO: 12/19/17 Replace ProgressDialog with swipe refresh layout
     ProgressDialog mDialog;
+    private static MoviesState mState = null;
 
     MovieListAdapter mAdapter;
-    MoviesPresenter mMoviesPresenter;
+    MoviesPresenter mPresenter;
 
+    // TODO: 12/23/17 shouldn't be saving list here move to presenter
     List<Movie> mMovies;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle inState) {
+        super.onCreate(inState);
         setContentView(R.layout.activity_main);
         Picasso.with(this).setLoggingEnabled(true);
         mRvMovieList = findViewById(R.id.rv_movie_list);
@@ -58,8 +62,34 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
         });
         mRvMovieList.setAdapter(mAdapter);
 
-        mMoviesPresenter = new MoviesPresenter(MoviesRepository.getInstance(), this);
-        mMoviesPresenter.load(SortOrder.Popular);
+        mPresenter = new MoviesPresenter(MoviesRepository.getInstance(), this);
+
+        if (inState != null) {
+            mState = new MoviesState(
+                    inState.getInt(SAVEKEY_LAST_PAGE_NUMBER),
+                    (SortOrder) inState.getSerializable(SAVEKEY_LAST_SORT_ORDER)
+            );
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mPresenter.start(mState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        MoviesState state = (MoviesState) mPresenter.getState();
+        outState.putInt(SAVEKEY_LAST_PAGE_NUMBER, state.getLastPageNumber());
+        outState.putSerializable(SAVEKEY_LAST_SORT_ORDER, state.getLastSortOrder());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // TODO: 12/23/17 unsubscribe
     }
 
     @Override
@@ -71,16 +101,19 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        SortOrder newSortOrder;
         switch (item.getItemId()) {
             case R.id.action_sort_popularity:
-                mMoviesPresenter.load(SortOrder.Popular);
-                return true;
+                newSortOrder = SortOrder.Popular;
+                break;
             case R.id.action_sort_rating:
-                mMoviesPresenter.load(SortOrder.TopRated);
-                return true;
+                newSortOrder = SortOrder.TopRated;
+                break;
             default:
             return super.onOptionsItemSelected(item);
         }
+        mPresenter.onSortOrderChanged(newSortOrder);
+        return true;
     }
 
     @Override

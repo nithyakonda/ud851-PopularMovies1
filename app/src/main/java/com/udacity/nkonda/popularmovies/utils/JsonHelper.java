@@ -18,20 +18,28 @@ import java.util.List;
  */
 
 public class JsonHelper {
+    private static final String JSONKEY_RESULTS = "results";
+    private static final String JSONKEY_ID = "id";
+    private static final String JSONKEY_TITLE = "title";
+    private static final String JSONKEY_POSTER_PATH = "poster_path";
+    private static final String JSONKEY_ORIGINAL_TITLE = "original_title";
+    private static final String JSONKEY_OVERVIEW = "overview";
+    private static final String JSONKEY_VOTE_AVERAGE = "vote_average";
+    private static final String JSONKEY_RELEASE_DATE = "release_date";
+
     public static List<Movie> parseMoviesListJson(String moviesListJsonStr) {
-        // TODO: 12/18/17 create string variables
         List<Movie> movies = new ArrayList<>();
         try {
-            JSONArray moviesJson = new JSONObject(moviesListJsonStr).getJSONArray("results");
+            JSONArray moviesJson = new JSONObject(moviesListJsonStr).getJSONArray(JSONKEY_RESULTS);
             JSONObject movieJson;
             int id;
             String title;
             String posterPath;
             for (int i = 0; i < moviesJson.length(); i++) {
                 movieJson = moviesJson.getJSONObject(i);
-                id = movieJson.getInt("id");
-                title = movieJson.getString("title");
-                posterPath = movieJson.getString("poster_path");
+                id = movieJson.getInt(JSONKEY_ID);
+                title = movieJson.getString(JSONKEY_TITLE);
+                posterPath = movieJson.getString(JSONKEY_POSTER_PATH);
                 movies.add(new Movie(id, title, posterPath));
             }
         } catch (JSONException e) {
@@ -45,11 +53,11 @@ public class JsonHelper {
         try {
             JSONObject movieDetailsJson = new JSONObject(movieDetailsJsonStr);
             movieDetails = new MovieDetails(
-                    movieDetailsJson.getString("original_title"),
-                    movieDetailsJson.getString("poster_path"),
-                    movieDetailsJson.getString("overview"),
-                    movieDetailsJson.getDouble("vote_average"),
-                    formatDate(movieDetailsJson.getString("release_date"))
+                    movieDetailsJson.getString(JSONKEY_ORIGINAL_TITLE),
+                    movieDetailsJson.getString(JSONKEY_POSTER_PATH),
+                    movieDetailsJson.getString(JSONKEY_OVERVIEW),
+                    movieDetailsJson.getDouble(JSONKEY_VOTE_AVERAGE),
+                    formatDate(movieDetailsJson.getString(JSONKEY_RELEASE_DATE))
             );
         } catch (JSONException e) {
             e.printStackTrace();
