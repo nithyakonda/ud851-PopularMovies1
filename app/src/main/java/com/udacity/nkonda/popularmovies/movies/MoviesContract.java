@@ -17,7 +17,7 @@ public interface MoviesContract {
 
         void hideProgress();
 
-        void showResults(List<Movie> popularMovies);
+        void showResults(List<Movie> popularMovies, int totalPages);
 
         void showError(String errorMsg);
     }

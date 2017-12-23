@@ -42,11 +42,16 @@ public class MoviesRepository implements MoviesDataSource {
                     if (httpResponse == null) {
                         callback.onDataNotAvailable();
                     } else {
-                        List<Movie> movies = JsonHelper.parseMoviesListJson(httpResponse);
-                        if (movies.isEmpty()) {
-                            callback.onDataNotAvailable();
+                        int totalPages = JsonHelper.getTotalPages(httpResponse);
+                        if (totalPages > 0) {
+                            List<Movie> movies = JsonHelper.parseMoviesListJson(httpResponse);
+                            if (movies.isEmpty()) {
+                                callback.onDataNotAvailable();
+                            } else {
+                                callback.onMoviesLoaded(movies, totalPages);
+                            }
                         } else {
-                            callback.onMoviesLoaded(movies);
+                            callback.onDataNotAvailable();
                         }
                     }
                 }

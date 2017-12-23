@@ -62,9 +62,9 @@ public class MoviesPresenter implements MoviesContract.Presenter {
 
         mMoviesRepository.getMovies(mLastSortOrder, mLastPageNumber, new MoviesDataSource.GetMoviesCallback() {
             @Override
-            public void onMoviesLoaded(List<Movie> movies) {
+            public void onMoviesLoaded(List<Movie> movies, int totalPages) {
                 mMoviesView.hideProgress();
-                mMoviesView.showResults(movies);
+                mMoviesView.showResults(movies, totalPages);
             }
 
             @Override
@@ -84,8 +84,8 @@ public class MoviesPresenter implements MoviesContract.Presenter {
     public void onScrolledToTop() {
         if (mLastPageNumber > 1) {
             mLastPageNumber--;
-            load();
         }
+        load();
     }
 
     @Override

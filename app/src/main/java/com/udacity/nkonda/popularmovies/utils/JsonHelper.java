@@ -20,12 +20,24 @@ import java.util.List;
 public class JsonHelper {
     private static final String JSONKEY_RESULTS = "results";
     private static final String JSONKEY_ID = "id";
+    private static final String JSONKEY_TOTAL_PAGES = "total_pages";
     private static final String JSONKEY_TITLE = "title";
     private static final String JSONKEY_POSTER_PATH = "poster_path";
     private static final String JSONKEY_ORIGINAL_TITLE = "original_title";
     private static final String JSONKEY_OVERVIEW = "overview";
     private static final String JSONKEY_VOTE_AVERAGE = "vote_average";
     private static final String JSONKEY_RELEASE_DATE = "release_date";
+
+    public static int getTotalPages(String moviesListJsonStr) {
+        int totalPages = 0;
+        try {
+            JSONObject responseJson = new JSONObject(moviesListJsonStr);
+            totalPages = responseJson.getInt(JSONKEY_TOTAL_PAGES);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return totalPages;
+    }
 
     public static List<Movie> parseMoviesListJson(String moviesListJsonStr) {
         List<Movie> movies = new ArrayList<>();

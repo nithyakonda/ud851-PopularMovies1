@@ -1,17 +1,19 @@
 package com.udacity.nkonda.popularmovies.movies;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.github.rafaelcrz.android_endless_scroll_lib.ScrollEndless;
 import com.squareup.picasso.Picasso;
 import com.udacity.nkonda.popularmovies.R;
 import com.udacity.nkonda.popularmovies.data.Movie;
@@ -26,16 +28,17 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
     private static final String SAVEKEY_LAST_PAGE_NUMBER = "SAVEKEY_LAST_PAGE_NUMBER";
     private static final String SAVEKEY_LAST_SORT_ORDER = "SAVEKEY_LAST_SORT_ORDER";
 
-    RecyclerView mRvMovieList;
-    // TODO: 12/19/17 Replace ProgressDialog with swipe refresh layout
-    ProgressDialog mDialog;
     private static MoviesState mState = null;
 
-    MovieListAdapter mAdapter;
-    MoviesPresenter mPresenter;
+    private RecyclerView mRvMovieList;
+    private SwipeRefreshLayout mSrlMovies;
+
+    private ScrollEndless mEndlessScroll;
+    private MovieListAdapter mAdapter;
+    private MoviesPresenter mPresenter;
 
     // TODO: 12/23/17 shouldn't be saving list here move to presenter
-    List<Movie> mMovies;
+    private List<Movie> mMovies;
 
     @Override
     protected void onCreate(Bundle inState) {
@@ -43,7 +46,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
         setContentView(R.layout.activity_main);
         Picasso.with(this).setLoggingEnabled(true);
         mRvMovieList = findViewById(R.id.rv_movie_list);
-        mDialog = new ProgressDialog(this);
+        mSrlMovies = findViewById(R.id.srl_movies);
 
         RecyclerView.LayoutManager layoutManager = null;
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -61,6 +64,42 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
             }
         });
         mRvMovieList.setAdapter(mAdapter);
+        mEndlessScroll = new ScrollEndless(this, mRvMovieList, (LinearLayoutManager) layoutManager);
+        mEndlessScroll.addScrollEndless(new ScrollEndless.EndlessScrollListener() {
+            @Override
+            public void onLoadMore() {
+                int nextPage = mEndlessScroll.getPage() + 1;
+                mEndlessScroll.setPage(nextPage);
+                mPresenter.onScrolledToBottom();
+            }
+
+            @Override
+            public void onLoadAllFinish() {
+
+            }
+        });
+//        mRvMovieList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                if (!recyclerView.canScrollVertically(-1)) {
+//                    mPresenter.onScrolledToTop();
+//                } else if (!recyclerView.canScrollVertically(1)) {
+//                    mPresenter.onScrolledToBottom();
+//                }
+//            }
+//        });
+
+        mSrlMovies.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.onScrolledToTop();
+            }
+        });
 
         mPresenter = new MoviesPresenter(MoviesRepository.getInstance(), this);
 
@@ -118,16 +157,19 @@ public class MoviesActivity extends AppCompatActivity implements MoviesContract.
 
     @Override
     public void showProgress() {
-        mDialog.setMessage("Processing..");
+        mSrlMovies.setRefreshing(true);
+        mEndlessScroll.isLoading(true);
     }
 
     @Override
     public void hideProgress() {
-        mDialog.dismiss();
+        mSrlMovies.setRefreshing(false);
+        mEndlessScroll.isLoading(false);
     }
 
     @Override
-    public void showResults(final List<Movie> movies) {
+    public void showResults(final List<Movie> movies, int totalPages) {
+        mEndlessScroll.setTotalPage(totalPages);
         mMovies = movies;
         mAdapter.setItems(mMovies);
         mAdapter.notifyDataSetChanged();

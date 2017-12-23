@@ -16,7 +16,7 @@ public interface MoviesDataSource {
 
     interface GetMoviesCallback {
 
-        void onMoviesLoaded(List<Movie> movies);
+        void onMoviesLoaded(List<Movie> movies, int totalPages);
 
         void onDataNotAvailable();
     }
