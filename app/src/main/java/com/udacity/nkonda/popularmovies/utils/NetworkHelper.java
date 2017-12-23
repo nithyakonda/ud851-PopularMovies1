@@ -17,23 +17,15 @@ package com.udacity.nkonda.popularmovies.utils;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.udacity.nkonda.popularmovies.BuildConfig;
-import com.udacity.nkonda.popularmovies.callbacks.GetPopularMoviesCallback;
-import com.udacity.nkonda.popularmovies.data.Movie;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.udacity.nkonda.popularmovies.movies.SortOrder;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -44,47 +36,67 @@ public class NetworkHelper {
 
     private final static String API_KEY = BuildConfig.API_KEY;
 
-    private final static String TMDB_BASE_URL = "https://api.themoviedb.org/3/movie/popular";
-
+    private final static String TMDB_BASE_MOVIES_URL = "https://api.themoviedb.org/3/movie";
+    private final static String TMDB_POPULAR_MOVIES_URL = TMDB_BASE_MOVIES_URL + "/popular";
+    private final static String TMDB_TOP_RATED_MOVIES_URL = TMDB_BASE_MOVIES_URL + "/top_rated";
     private final static String TMDB_BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w185";
 
-    /*
-     * The sort field. One of stars, forks, or updated.
-     * Default: results are sorted by best match if no field is specified.
-     */
-    private static String PARAM_API_KEY = "api_key";
-    final static String PARAM_SORT = "sort";
-    final static String sortBy = "stars";
+    private final static String PARAM_API_KEY = "api_key";
+    private static NetworkHelper INSTANCE;
 
-    /**
-     * Builds the URL used to query GitHub.
-     *
-     * @param githubSearchQuery The keyword that will be queried for.
-     * @return The URL to use to query the GitHub.
-     */
-    public static URL buildUrl() {
-        Uri builtUri = Uri.parse(TMDB_BASE_URL).buildUpon()
+    private NetworkHelper() {}
+
+    public static NetworkHelper getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new NetworkHelper();
+        }
+        return INSTANCE;
+    }
+
+    public void startHttpRequestTask(URL url, OnHttpResponseListener listener) {
+        new HttpRequestTask(listener).execute(url);
+    }
+
+    public URL getUrl (int movieId) {
+        String getMovieDetailsUrl = TMDB_BASE_MOVIES_URL + "/" + String.valueOf(movieId);
+        Uri uri = Uri.parse(getMovieDetailsUrl).buildUpon()
                 .appendQueryParameter(PARAM_API_KEY, API_KEY)
                 .build();
+        return convertUriToUrl(uri);
+    }
 
+    public URL getUrl(SortOrder sortOrder) {
+        Uri uri = null;
+        switch (sortOrder) {
+            case Popular:
+                uri = Uri.parse(TMDB_POPULAR_MOVIES_URL).buildUpon()
+                        .appendQueryParameter(PARAM_API_KEY, API_KEY)
+                        .build();
+                break;
+            case TopRated:
+                uri = Uri.parse(TMDB_TOP_RATED_MOVIES_URL).buildUpon()
+                        .appendQueryParameter(PARAM_API_KEY, API_KEY)
+                        .build();
+                break;
+        }
+        return convertUriToUrl(uri);
+    }
+
+    public String getUrl(String imagePath) {
+        return TMDB_BASE_IMAGE_URL + imagePath;
+    }
+
+    private URL convertUriToUrl(Uri uri) {
         URL url = null;
         try {
-            url = new URL(builtUri.toString());
+            url = new URL(uri.toString());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
         return url;
     }
 
-    /**
-     * This method returns the entire result from the HTTP response.
-     *
-     * @param url The URL to fetch the HTTP response from.
-     * @return The contents of the HTTP response.
-     * @throws IOException Related to network and stream reading
-     */
-    public static String getResponseFromHttpUrl(URL url) throws IOException {
+    private String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
             InputStream in = urlConnection.getInputStream();
@@ -103,36 +115,20 @@ public class NetworkHelper {
         }
     }
 
-    private List<Movie> parseMoviesListJson(String moviesListJsonStr) {
-        List<Movie> movies = new ArrayList<>();
-        try {
-            JSONArray moviesJson = new JSONArray(moviesListJsonStr);
-            JSONObject movieJson;
-            int id;
-            String title;
-            String posterPath;
-            for (int i = 0; i < moviesJson.length(); i++) {
-                movieJson = moviesJson.getJSONObject(i);
-                id = movieJson.getInt("id");
-                title = movieJson.getString("title");
-                posterPath = movieJson.getString("poster_path");
-                movies.add(new Movie(id, title, posterPath));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return movies;
-    }
-
     // Async Task
     private class HttpRequestTask extends AsyncTask<URL, Void, String> {
+        final OnHttpResponseListener mListener;
+
+        public HttpRequestTask(OnHttpResponseListener listener) {
+            mListener = listener;
+        }
 
         @Override
         protected String doInBackground(URL... params) {
             URL searchUrl = params[0];
             String httpResponse = null;
             try {
-                httpResponse = NetworkHelper.getResponseFromHttpUrl(searchUrl);
+                httpResponse = getResponseFromHttpUrl(searchUrl);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -141,11 +137,13 @@ public class NetworkHelper {
 
         @Override
         protected void onPostExecute(String httpResponse) {
-            Log.d(TAG, parseMoviesListJson(httpResponse).toString());
+            if (mListener != null) {
+                mListener.onReceive(httpResponse);
+            }
         }
     }
 
-    public interface OnHttpResponseReceivedListener {
+    public interface OnHttpResponseListener {
         void onReceive(String httpResponse);
     }
 }

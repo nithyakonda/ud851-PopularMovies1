@@ -2,8 +2,8 @@ package com.udacity.nkonda.popularmovies.movies;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import com.squareup.picasso.Picasso;
 import com.udacity.nkonda.popularmovies.R;
 import com.udacity.nkonda.popularmovies.data.Movie;
-import com.udacity.nkonda.popularmovies.data.MovieDetails;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
 import com.udacity.nkonda.popularmovies.moviedetails.MovieDetailsActivity;
 

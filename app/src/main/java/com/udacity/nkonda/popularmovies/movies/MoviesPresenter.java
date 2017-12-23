@@ -19,7 +19,6 @@ package com.udacity.nkonda.popularmovies.movies;
 import android.support.annotation.NonNull;
 
 import com.udacity.nkonda.popularmovies.data.Movie;
-import com.udacity.nkonda.popularmovies.data.MovieDetails;
 import com.udacity.nkonda.popularmovies.data.source.MoviesDataSource;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
 

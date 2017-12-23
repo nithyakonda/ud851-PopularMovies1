@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 import com.udacity.nkonda.popularmovies.R;
 import com.udacity.nkonda.popularmovies.data.Movie;
+import com.udacity.nkonda.popularmovies.utils.NetworkHelper;
 
 import java.util.List;
 
@@ -67,7 +68,8 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
 
         public void bind(Context context, int position) {
             Movie movie = mMovies.get(position);
-            Picasso.with(context).load(TMDB_BASE_IMAGE_URL + movie.getPosterPath()).into(ivThumbnail);
+            String url = NetworkHelper.getInstance().getUrl(movie.getPosterPath());
+            Picasso.with(context).load(url).into(ivThumbnail);
         }
 
         @Override

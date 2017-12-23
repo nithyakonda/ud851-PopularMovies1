@@ -1,15 +1,17 @@
 package com.udacity.nkonda.popularmovies.moviedetails;
 
 import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.udacity.nkonda.popularmovies.R;
 import com.udacity.nkonda.popularmovies.data.MovieDetails;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
+import com.udacity.nkonda.popularmovies.utils.NetworkHelper;
 
 public class MovieDetailsActivity extends AppCompatActivity implements MovieDetailsContract.View{
     private static final String TAG = "PM_MovieDetailsActivity";
@@ -39,7 +41,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
         mPresenter = new MovieDetailsPresenter(MoviesRepository.getInstance(), this);
 
         if (getIntent() != null && getIntent().hasExtra(PARAM_MOVIE_ID)) {
-            mPresenter.load(getIntent().getIntExtra(PARAM_MOVIE_ID, -1));
+            int movieId = getIntent().getIntExtra(PARAM_MOVIE_ID, -1);
+            mPresenter.load(movieId);
+            Log.i(TAG, "Selected movie id::" + movieId);
         }
     }
 
@@ -60,8 +64,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
 
     @Override
     public void showMovieDetails(MovieDetails movieDetails) {
+        String url = NetworkHelper.getInstance().getUrl(movieDetails.getPosterPath());
+        Picasso.with(this).load(url).into(mIvPoster);
         mTvOriginalTitle.setText(movieDetails.getOriginalTitle());
-        // TODO: 12/21/17 format date to dd month yyyy 
         mTvReleaseDate.setText(movieDetails.getReleaseDate());
         mTvRating.setText(String.valueOf(movieDetails.getRating()));
         mTvPlotSynopsis.setText(movieDetails.getPlotSynopsis());
