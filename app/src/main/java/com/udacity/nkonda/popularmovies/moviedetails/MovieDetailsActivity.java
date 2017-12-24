@@ -82,7 +82,15 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsCo
                             public void onClick(DialogInterface dialog, int which) {
                                 mPresenter.load(movieId);
                             }
-                        });
+                        })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        hideProgress();
+                        mIvPoster.setBackgroundColor(getResources().getColor(R.color.placeholder));
+                        mContentLayout.setVisibility(View.VISIBLE);
+                    }
+                });
         builder.create().show();
     }
 
@@ -90,7 +98,10 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsCo
     public void showMovieDetails(MovieDetails movieDetails) {
         mContentLayout.setVisibility(View.VISIBLE);
         String url = NetworkHelper.getInstance().getUrl(movieDetails.getPosterPath());
-        Picasso.with(this).load(url).into(mIvPoster);
+        Picasso.with(this)
+                .load(url)
+                .placeholder(R.color.placeholder)
+                .into(mIvPoster);
         mTvOriginalTitle.setText(movieDetails.getOriginalTitle());
         mTvReleaseDate.setText(movieDetails.getReleaseDate());
         mTvRating.setText(String.valueOf(movieDetails.getRating()));

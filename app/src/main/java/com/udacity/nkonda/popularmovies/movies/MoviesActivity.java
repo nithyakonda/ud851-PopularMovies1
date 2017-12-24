@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.github.rafaelcrz.android_endless_scroll_lib.ScrollEndless;
 import com.squareup.picasso.Picasso;
@@ -175,7 +176,15 @@ public class MoviesActivity extends BaseActivity implements MoviesContract.View{
                     public void onClick(DialogInterface dialog, int which) {
                         mPresenter.load();
                     }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        mSrlMovies.setRefreshing(false);
+                        Toast.makeText(MoviesActivity.this, R.string.toast_refresh_message, Toast.LENGTH_LONG).show();
+                    }
                 });
-        builder.create().show();
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

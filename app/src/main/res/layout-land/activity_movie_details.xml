@@ -55,12 +55,13 @@
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                         tools:text="@string/movie_details_original_title_label"/>
 
-                    <TextView
+                    <app.youkai.placeholdertextview.PlaceholderTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/tv_release_date"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        tools:text="@string/movie_details_release_date_label"/>
+                        app:ptv_placeholderColor="@color/placeholder_text"
+                        app:ptv_sampleText="@string/movie_details_release_date_label"/>
                 </LinearLayout>
 
                 <ImageView
@@ -71,7 +72,7 @@
                     android:src="@android:drawable/star_big_off"
                     android:tint="@android:color/holo_orange_dark"/>
 
-                <TextView
+                <app.youkai.placeholdertextview.PlaceholderTextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -79,22 +80,23 @@
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                     tools:text="@string/movie_details_rating_label"/>
 
-                <TextView
+                <app.youkai.placeholdertextview.PlaceholderTextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:text="@string/movie_details_max_rating_label"/>
+                    tools:text="@string/movie_details_max_rating_label"/>
             </LinearLayout>
 
-            <TextView
+            <app.youkai.placeholdertextview.PlaceholderTextView
                 android:id="@+id/tv_plot_synopsis"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="2"
                 android:scrollbars="vertical"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                tools:text="@string/movie_details_plot_synopsis_label"/>
+                app:ptv_placeholderColor="@color/placeholder_text"
+                app:ptv_sampleText="@string/movie_details_plot_synopsis_label"/>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

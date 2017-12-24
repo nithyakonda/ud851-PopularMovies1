@@ -1,12 +1,13 @@
 <resources>
-    <string name="app_name">PopularMovies</string>
+    <string name="app_name">Popular Movies</string>
 
-    <!-- Menu strings -->
     <string name="action_sort_title">Sort</string>
     <string name="action_sort_popularity_title">By Popularity</string>
     <string name="action_sort_rating_title">By Rating</string>
+
     <string name="error_dialog_title">Oops!</string>
     <string name="error_dialog_button_label">Retry</string>
+
     <string name="movie_details_original_title_label">Sample Title</string>
     <string name="movie_details_rating_label">7</string>
     <string name="movie_details_max_rating_label">/10</string>
@@ -16,4 +17,6 @@
         remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like
         Aldus PageMaker including versions of Lorem Ipsum.
     </string>
+    
+    <string name="toast_refresh_message">Pull down to refresh</string>
 </resources>

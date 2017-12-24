@@ -4,6 +4,7 @@ android {
     repositories {
         mavenCentral()
         maven { url "https://jitpack.io" }
+        jcenter()
     }
     compileSdkVersion 26
     defaultConfig {
@@ -13,6 +14,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "API_KEY", '"Set you API Key here"'
     }
     buildTypes {
         release {
@@ -29,6 +32,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:24.1.1'
     implementation 'com.android.support:cardview-v7:23.3.+'
     implementation 'com.github.rafaelcrz:android_scroll_endless:master-SNAPSHOT'
+    implementation 'app.youkai.placeholdertextview:library:1.1.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'

@@ -53,7 +53,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
 
     @Override
     public int getItemCount() {
-        return mMovies == null ? 0 : mMovies.size();
+        return mMovies == null ? 20 : mMovies.size();
     }
 
     public class MoviePosterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -67,9 +67,15 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         }
 
         public void bind(Context context, int position) {
-            Movie movie = mMovies.get(position);
-            String url = NetworkHelper.getInstance().getUrl(movie.getPosterPath());
-            Picasso.with(context).load(url).into(ivThumbnail);
+            String url = null;
+            if (mMovies != null) {
+                Movie movie = mMovies.get(position);
+                url = NetworkHelper.getInstance().getUrl(movie.getPosterPath());
+            }
+            Picasso.with(context)
+                    .load(url)
+                    .placeholder(R.color.placeholder)
+                    .into(ivThumbnail);
         }
 
         @Override

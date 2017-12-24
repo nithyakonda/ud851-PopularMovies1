@@ -81,7 +81,9 @@ public class MoviesPresenter implements MoviesContract.Presenter {
 
     @Override
     public void onMovieSelected(int position) {
-        mView.showMovieDetails(mMovies.get(position).getId());
+        if (mMovies != null) {
+            mView.showMovieDetails(mMovies.get(position).getId());
+        }
     }
 
     @Override
