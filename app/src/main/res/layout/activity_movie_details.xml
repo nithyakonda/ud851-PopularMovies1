@@ -7,89 +7,115 @@
     android:layout_height="match_parent"
     android:padding="15dp"
     tools:context="com.udacity.nkonda.popularmovies.moviedetails.MovieDetailsActivity">
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/pb_indicator"
-        android:layout_gravity="center"
-        style="@style/Base.TextAppearance.AppCompat.Large"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/content_layout"
-        android:orientation="vertical"
-        android:visibility="visible">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:id="@+id/iv_poster"
-            android:layout_weight="1"
-            android:paddingBottom="5dp"
-            android:layout_gravity="center"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent">
+        <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pb_indicator"
+                android:layout_gravity="center"
+                style="@style/Base.TextAppearance.AppCompat.Large"/>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/tv_original_title"
-                    android:layout_marginTop="5dp"
-                    app:autoSizeTextType="uniform"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                    tools:text="@string/movie_details_original_title_label"/>
+                android:layout_height="match_parent"
+                android:id="@+id/content_layout"
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginRight="5dp"
-                    android:src="@android:drawable/star_big_off"
-                    android:tint="@android:color/holo_orange_dark"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:id="@+id/iv_poster"
+                    android:layout_weight="1"
+                    android:paddingBottom="5dp"
+                    android:layout_gravity="center"/>
 
-                <app.youkai.placeholdertextview.PlaceholderTextView
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/tv_original_title"
+                            android:layout_marginTop="5dp"
+                            app:autoSizeTextType="uniform"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                            tools:text="@string/movie_details_original_title_label"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginRight="5dp"
+                            android:src="@android:drawable/star_big_off"
+                            android:tint="@android:color/holo_orange_dark"/>
+
+                        <app.youkai.placeholdertextview.PlaceholderTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:id="@+id/tv_rating"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                            tools:text="@string/movie_details_rating_label"/>
+
+                        <app.youkai.placeholdertextview.PlaceholderTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                            tools:text="@string/movie_details_max_rating_label"/>
+                    </LinearLayout>
+
+                    <app.youkai.placeholdertextview.PlaceholderTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_release_date"
+                        android:paddingBottom="5dp"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        app:ptv_placeholderColor="@color/placeholder_text"
+                        app:ptv_sampleText="@string/movie_details_release_date_label"/>
+
+                    <app.youkai.placeholdertextview.PlaceholderTextView
+                        android:id="@+id/tv_plot_synopsis"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:scrollbars="vertical"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                        app:ptv_placeholderColor="@color/placeholder_text"
+                        app:ptv_sampleText="@string/movie_details_plot_synopsis_label"/>
+                </LinearLayout>
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:id="@+id/tv_rating"
+                    android:layout_height="wrap_content"
+                    android:text="@string/movie_details_trailers_label"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                    tools:text="@string/movie_details_rating_label"/>
-
-                <app.youkai.placeholdertextview.PlaceholderTextView
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"/>
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rv_trailer_list"/>
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    tools:text="@string/movie_details_max_rating_label"/>
+                    android:layout_height="wrap_content"
+                    android:text="@string/movie_details_reviews_label"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"/>
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rv_review_list"/>
             </LinearLayout>
-
-            <app.youkai.placeholdertextview.PlaceholderTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_release_date"
-                android:paddingBottom="5dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                app:ptv_placeholderColor="@color/placeholder_text"
-                app:ptv_sampleText="@string/movie_details_release_date_label"/>
-
-            <app.youkai.placeholdertextview.PlaceholderTextView
-                android:id="@+id/tv_plot_synopsis"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:scrollbars="vertical"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                app:ptv_placeholderColor="@color/placeholder_text"
-                app:ptv_sampleText="@string/movie_details_plot_synopsis_label"/>
-        </LinearLayout>
-    </LinearLayout>
+        </FrameLayout>
+    </ScrollView>
 </FrameLayout>

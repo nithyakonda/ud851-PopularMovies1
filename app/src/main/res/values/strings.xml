@@ -17,6 +17,8 @@
         remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like
         Aldus PageMaker including versions of Lorem Ipsum.
     </string>
+    <string name="movie_details_trailers_label">Trailers</string>
+    <string name="movie_details_reviews_label">Reviews</string>
     
     <string name="toast_refresh_message">Pull down to refresh</string>
 </resources>
