@@ -40,6 +40,8 @@ public class NetworkHelper {
     private final static String TMDB_POPULAR_MOVIES_URL = TMDB_BASE_MOVIES_URL + "/popular";
     private final static String TMDB_TOP_RATED_MOVIES_URL = TMDB_BASE_MOVIES_URL + "/top_rated";
     private final static String TMDB_BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w185";
+    private final static String TMDB_TRAILERS_URL = TMDB_BASE_MOVIES_URL + "%d/videos";
+    private final static String TMDB_REVIEWS_URL = TMDB_BASE_MOVIES_URL + "%d/reviews";
 
     private final static String PARAM_API_KEY = "api_key";
     private final static String PARAM_PAGE = "page";
@@ -58,11 +60,19 @@ public class NetworkHelper {
         new HttpRequestTask(listener).execute(url);
     }
 
-    public URL getUrl (int movieId) {
-        String getMovieDetailsUrl = TMDB_BASE_MOVIES_URL + "/" + String.valueOf(movieId);
-        Uri uri = Uri.parse(getMovieDetailsUrl).buildUpon()
+    private Uri getUriWithApiKey(String url) {
+        return Uri.parse(url).buildUpon()
                 .appendQueryParameter(PARAM_API_KEY, API_KEY)
                 .build();
+    }
+
+    private URL appendApiKeyParamTo(String url) {
+        return convertUriToUrl(getUriWithApiKey(url));
+    }
+
+    public URL getMovieDetailsUrl(int movieId) {
+        String getMovieDetailsUrl = TMDB_BASE_MOVIES_URL + "/" + String.valueOf(movieId);
+        Uri uri = getUriWithApiKey(getMovieDetailsUrl);
         return convertUriToUrl(uri);
     }
 
@@ -77,8 +87,7 @@ public class NetworkHelper {
                 baseUrl = TMDB_TOP_RATED_MOVIES_URL;
                 break;
         }
-        uri = Uri.parse(baseUrl).buildUpon()
-                .appendQueryParameter(PARAM_API_KEY, API_KEY)
+        uri = getUriWithApiKey(baseUrl).buildUpon()
                 .appendQueryParameter(PARAM_PAGE, String.valueOf(page))
                 .build();
         return convertUriToUrl(uri);
@@ -86,6 +95,16 @@ public class NetworkHelper {
 
     public String getUrl(String imagePath) {
         return TMDB_BASE_IMAGE_URL + imagePath;
+    }
+
+    public URL getTrailersUrl(int movieId) {
+        String trailersUrl = String.format(TMDB_TRAILERS_URL, movieId);
+        return appendApiKeyParamTo(trailersUrl);
+    }
+
+    public URL getReviewsUrl(int movieId) {
+        String reviewsUrl = String.format(TMDB_REVIEWS_URL, movieId);
+        return appendApiKeyParamTo(reviewsUrl);
     }
 
     private URL convertUriToUrl(Uri uri) {

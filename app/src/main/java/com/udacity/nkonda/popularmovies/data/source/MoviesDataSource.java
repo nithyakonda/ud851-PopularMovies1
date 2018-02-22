@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.udacity.nkonda.popularmovies.data.Movie;
 import com.udacity.nkonda.popularmovies.data.MovieDetails;
+import com.udacity.nkonda.popularmovies.data.Review;
+import com.udacity.nkonda.popularmovies.data.Trailer;
 import com.udacity.nkonda.popularmovies.movies.SortOrder;
 
 import java.util.List;
@@ -28,7 +30,25 @@ public interface MoviesDataSource {
         void onDataNotAvailable();
     }
 
+    interface GetTrailersCallback {
+
+        void onTrailersLoaded(List<Trailer> trailers);
+
+        void onDataNotAvailable();
+    }
+
+    interface GetReviewsCallback {
+
+        void onReviewsLoaded(List<Review> reviews);
+
+        void onDataNotAvailable();
+    }
+
     void getMovies(SortOrder sortOrder, int pageNo, @NonNull GetMoviesCallback callback);
 
     void getMovieDetails(@NonNull int movieId, @NonNull GetMovieDetailsCallback callback);
+
+    void getTrailers(@NonNull int movieId, @NonNull GetTrailersCallback callback);
+
+    void getReviews(@NonNull int movieId, @NonNull GetReviewsCallback callback);
 }

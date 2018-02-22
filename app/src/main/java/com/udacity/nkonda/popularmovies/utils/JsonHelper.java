@@ -2,6 +2,8 @@ package com.udacity.nkonda.popularmovies.utils;
 
 import com.udacity.nkonda.popularmovies.data.Movie;
 import com.udacity.nkonda.popularmovies.data.MovieDetails;
+import com.udacity.nkonda.popularmovies.data.Review;
+import com.udacity.nkonda.popularmovies.data.Trailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +29,9 @@ public class JsonHelper {
     private static final String JSONKEY_OVERVIEW = "overview";
     private static final String JSONKEY_VOTE_AVERAGE = "vote_average";
     private static final String JSONKEY_RELEASE_DATE = "release_date";
+    private static final String JSONKEY_TRAILER_NAME = "name";
+    private static final String JSONKEY_REVIEW_AUTHOR = "author";
+    private static final String JSONKEY_REVIEW_CONTENT = "content";
 
     public static int getTotalPages(String moviesListJsonStr) {
         int totalPages = 0;
@@ -75,6 +80,42 @@ public class JsonHelper {
             e.printStackTrace();
         }
         return movieDetails;
+    }
+
+    public static List<Trailer> parseTrailersJson(String trailersJsonStr) {
+        List<Trailer> trailers = new ArrayList<>();
+        try {
+            JSONArray trailersJson = new JSONObject(trailersJsonStr).getJSONArray(JSONKEY_RESULTS);
+            JSONObject trailerJson;
+            for (int i = 0; i < trailersJson.length(); i++) {
+                trailerJson = trailersJson.getJSONObject(i);
+                trailers.add(new Trailer(
+                        trailerJson.getString(JSONKEY_ID),
+                        trailerJson.getString(JSONKEY_TRAILER_NAME)
+                ));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return trailers;
+    }
+
+    public static List<Review> parseReviewsJson(String reviewsJsonStr) {
+        List<Review> reviews = new ArrayList<>();
+        try {
+            JSONArray reviewsJson = new JSONObject(reviewsJsonStr).getJSONArray(JSONKEY_RESULTS);
+            JSONObject reviewJson;
+            for (int i = 0; i < reviewsJson.length(); i++) {
+                reviewJson = reviewsJson.getJSONObject(i);
+                reviews.add(new Review(
+                        reviewJson.getString(JSONKEY_REVIEW_AUTHOR),
+                        reviewJson.getString(JSONKEY_REVIEW_CONTENT)
+                ));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return reviews;
     }
 
     public static String formatDate(String dateStr) {

@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.udacity.nkonda.popularmovies.data.Movie;
 import com.udacity.nkonda.popularmovies.data.MovieDetails;
+import com.udacity.nkonda.popularmovies.data.Review;
+import com.udacity.nkonda.popularmovies.data.Trailer;
 import com.udacity.nkonda.popularmovies.movies.SortOrder;
 import com.udacity.nkonda.popularmovies.utils.JsonHelper;
 import com.udacity.nkonda.popularmovies.utils.NetworkHelper;
@@ -60,7 +62,7 @@ public class MoviesRepository implements MoviesDataSource {
 
     @Override
     public void getMovieDetails(@NonNull int movieId, @NonNull final GetMovieDetailsCallback callback) {
-        URL getMovieDetailsUrl = mNetworkHelper.getUrl(movieId);
+        URL getMovieDetailsUrl = mNetworkHelper.getMovieDetailsUrl(movieId);
         mNetworkHelper.startHttpRequestTask(getMovieDetailsUrl,
             new NetworkHelper.OnHttpResponseListener() {
                 @Override
@@ -77,5 +79,47 @@ public class MoviesRepository implements MoviesDataSource {
                     }
                 }
             });
+    }
+
+    @Override
+    public void getTrailers(@NonNull int movieId, @NonNull final GetTrailersCallback callback) {
+        URL trailersUrl = mNetworkHelper.getTrailersUrl(movieId);
+        mNetworkHelper.startHttpRequestTask(trailersUrl,
+                new NetworkHelper.OnHttpResponseListener() {
+                    @Override
+                    public void onReceive(String httpResponse) {
+                        if (httpResponse == null) {
+                            callback.onDataNotAvailable();
+                        } else {
+                            List<Trailer> trailers = JsonHelper.parseTrailersJson(httpResponse);
+                            if (trailers == null) {
+                                callback.onDataNotAvailable();
+                            } else {
+                                callback.onTrailersLoaded(trailers);
+                            }
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void getReviews(@NonNull int movieId, @NonNull final GetReviewsCallback callback) {
+        URL reviewsUrl = mNetworkHelper.getReviewsUrl(movieId);
+        mNetworkHelper.startHttpRequestTask(reviewsUrl,
+                new NetworkHelper.OnHttpResponseListener() {
+                    @Override
+                    public void onReceive(String httpResponse) {
+                        if (httpResponse == null) {
+                            callback.onDataNotAvailable();
+                        } else {
+                            List<Review> reviews = JsonHelper.parseReviewsJson(httpResponse);
+                            if (reviews == null) {
+                                callback.onDataNotAvailable();
+                            } else {
+                                callback.onReviewsLoaded(reviews);
+                            }
+                        }
+                    }
+                });
     }
 }
