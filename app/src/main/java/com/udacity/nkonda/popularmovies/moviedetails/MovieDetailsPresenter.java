@@ -2,8 +2,11 @@ package com.udacity.nkonda.popularmovies.moviedetails;
 
 import com.udacity.nkonda.popularmovies.BaseState;
 import com.udacity.nkonda.popularmovies.data.MovieDetails;
+import com.udacity.nkonda.popularmovies.data.Trailer;
 import com.udacity.nkonda.popularmovies.data.source.MoviesDataSource;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
+
+import java.util.List;
 
 /**
  * Created by nkonda on 12/21/17.
@@ -45,6 +48,26 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter {
                 @Override
                 public void onDataNotAvailable() {
                     mView.showError("Oops! Something went wrong. Please try again later.");
+                }
+            });
+        } else {
+            mView.showError("You are not connected to the internet");
+        }
+    }
+
+    @Override
+    public void loadTrailers(int movieId) {
+        if (mView.isOnline()) {
+
+            mRepository.getTrailers(movieId, new MoviesDataSource.GetTrailersCallback() {
+                @Override
+                public void onTrailersLoaded(List<Trailer> trailers) {
+                    mView.showTrailers(trailers);
+                }
+
+                @Override
+                public void onDataNotAvailable() {
+                    mView.showError("Oops! Could not load trailers. Please try again later.");
                 }
             });
         } else {

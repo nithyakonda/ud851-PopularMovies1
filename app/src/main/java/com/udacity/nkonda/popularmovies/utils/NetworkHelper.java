@@ -40,8 +40,8 @@ public class NetworkHelper {
     private final static String TMDB_POPULAR_MOVIES_URL = TMDB_BASE_MOVIES_URL + "/popular";
     private final static String TMDB_TOP_RATED_MOVIES_URL = TMDB_BASE_MOVIES_URL + "/top_rated";
     private final static String TMDB_BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w185";
-    private final static String TMDB_TRAILERS_URL = TMDB_BASE_MOVIES_URL + "%d/videos";
-    private final static String TMDB_REVIEWS_URL = TMDB_BASE_MOVIES_URL + "%d/reviews";
+    private final static String TMDB_TRAILERS_URL = TMDB_BASE_MOVIES_URL + "/%d/videos";
+    private final static String TMDB_REVIEWS_URL = TMDB_BASE_MOVIES_URL + "/%d/reviews";
 
     private final static String PARAM_API_KEY = "api_key";
     private final static String PARAM_PAGE = "page";

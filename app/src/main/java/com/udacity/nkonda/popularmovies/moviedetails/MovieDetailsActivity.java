@@ -15,8 +15,11 @@ import com.squareup.picasso.Picasso;
 import com.udacity.nkonda.popularmovies.BaseActivity;
 import com.udacity.nkonda.popularmovies.R;
 import com.udacity.nkonda.popularmovies.data.MovieDetails;
+import com.udacity.nkonda.popularmovies.data.Trailer;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
 import com.udacity.nkonda.popularmovies.utils.NetworkHelper;
+
+import java.util.List;
 
 public class MovieDetailsActivity extends BaseActivity implements MovieDetailsContract.View{
     private static final String TAG = "PM_MovieDetailsActivity";
@@ -53,6 +56,7 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsCo
         if (getIntent() != null && getIntent().hasExtra(PARAM_MOVIE_ID)) {
             movieId = getIntent().getIntExtra(PARAM_MOVIE_ID, -1);
             mPresenter.load(movieId);
+            mPresenter.loadTrailers(movieId);
             Log.i(TAG, "Selected movie id::" + movieId);
         }
     }
@@ -106,5 +110,10 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsCo
         mTvReleaseDate.setText(movieDetails.getReleaseDate());
         mTvRating.setText(String.valueOf(movieDetails.getRating()));
         mTvPlotSynopsis.setText(movieDetails.getPlotSynopsis());
+    }
+
+    @Override
+    public void showTrailers(List<Trailer> trailers) {
+        Log.d("NKK", trailers.toString());
     }
 }
