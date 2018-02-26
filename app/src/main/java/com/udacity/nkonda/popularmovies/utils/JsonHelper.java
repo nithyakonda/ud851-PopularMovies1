@@ -29,6 +29,7 @@ public class JsonHelper {
     private static final String JSONKEY_OVERVIEW = "overview";
     private static final String JSONKEY_VOTE_AVERAGE = "vote_average";
     private static final String JSONKEY_RELEASE_DATE = "release_date";
+    private static final String JSONKEY_TRAILER_KEY = "key";
     private static final String JSONKEY_TRAILER_NAME = "name";
     private static final String JSONKEY_REVIEW_AUTHOR = "author";
     private static final String JSONKEY_REVIEW_CONTENT = "content";
@@ -90,7 +91,7 @@ public class JsonHelper {
             for (int i = 0; i < trailersJson.length(); i++) {
                 trailerJson = trailersJson.getJSONObject(i);
                 trailers.add(new Trailer(
-                        trailerJson.getString(JSONKEY_ID),
+                        trailerJson.getString(JSONKEY_TRAILER_KEY),
                         trailerJson.getString(JSONKEY_TRAILER_NAME)
                 ));
             }

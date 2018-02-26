@@ -1,8 +1,12 @@
 package com.udacity.nkonda.popularmovies.moviedetails;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +18,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.udacity.nkonda.popularmovies.BaseActivity;
 import com.udacity.nkonda.popularmovies.R;
+import com.udacity.nkonda.popularmovies.adapters.TrailersAdapter;
 import com.udacity.nkonda.popularmovies.data.MovieDetails;
 import com.udacity.nkonda.popularmovies.data.Trailer;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
@@ -34,8 +39,10 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsCo
     TextView mTvReleaseDate;
     TextView mTvRating;
     TextView mTvPlotSynopsis;
+    RecyclerView mRvTrailersList;
 
     MovieDetailsPresenter mPresenter;
+    TrailersAdapter mTrailersAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +56,19 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsCo
         mTvReleaseDate = findViewById(R.id.tv_release_date);
         mTvRating = findViewById(R.id.tv_rating);
         mTvPlotSynopsis = findViewById(R.id.tv_plot_synopsis);
+        mRvTrailersList = findViewById(R.id.rv_trailer_list);
+
         mTvPlotSynopsis.setMovementMethod(new ScrollingMovementMethod());
+        RecyclerView.LayoutManager trailersLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRvTrailersList.setLayoutManager(trailersLayoutManager);
+        mTrailersAdapter = new TrailersAdapter();
+        mTrailersAdapter.setOnItemClickedListener(new TrailersAdapter.OnItemClickedListener() {
+            @Override
+            public void onClick(int position) {
+                mPresenter.onTrailerSelected(position);
+            }
+        });
+        mRvTrailersList.setAdapter(mTrailersAdapter);
 
         mPresenter = new MovieDetailsPresenter(MoviesRepository.getInstance(), this);
 
@@ -114,6 +133,13 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsCo
 
     @Override
     public void showTrailers(List<Trailer> trailers) {
-        Log.d("NKK", trailers.toString());
+        mTrailersAdapter.setItems(trailers);
+        mTrailersAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void playTrailer(Uri trailerUri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, trailerUri);
+        startActivity(intent);
     }
 }

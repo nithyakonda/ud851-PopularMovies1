@@ -42,9 +42,11 @@ public class NetworkHelper {
     private final static String TMDB_BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w185";
     private final static String TMDB_TRAILERS_URL = TMDB_BASE_MOVIES_URL + "/%d/videos";
     private final static String TMDB_REVIEWS_URL = TMDB_BASE_MOVIES_URL + "/%d/reviews";
+    private final static String YOUTUBE_BASE_URL = "http://www.youtube.com/watch";
 
     private final static String PARAM_API_KEY = "api_key";
     private final static String PARAM_PAGE = "page";
+    private final static String PARAM_VIDEO_ID = "v";
     private static NetworkHelper INSTANCE;
 
     private NetworkHelper() {}
@@ -105,6 +107,13 @@ public class NetworkHelper {
     public URL getReviewsUrl(int movieId) {
         String reviewsUrl = String.format(TMDB_REVIEWS_URL, movieId);
         return appendApiKeyParamTo(reviewsUrl);
+    }
+
+    public Uri getYoutubeVideoUri(String videoId) {
+        Uri uri = Uri.parse(YOUTUBE_BASE_URL).buildUpon()
+                .appendQueryParameter(PARAM_VIDEO_ID, videoId)
+                .build();
+        return uri;
     }
 
     private URL convertUriToUrl(Uri uri) {

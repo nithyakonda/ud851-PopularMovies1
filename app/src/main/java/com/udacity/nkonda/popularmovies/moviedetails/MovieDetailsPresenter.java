@@ -1,10 +1,13 @@
 package com.udacity.nkonda.popularmovies.moviedetails;
 
+import android.net.Uri;
+
 import com.udacity.nkonda.popularmovies.BaseState;
 import com.udacity.nkonda.popularmovies.data.MovieDetails;
 import com.udacity.nkonda.popularmovies.data.Trailer;
 import com.udacity.nkonda.popularmovies.data.source.MoviesDataSource;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
+import com.udacity.nkonda.popularmovies.utils.NetworkHelper;
 
 import java.util.List;
 
@@ -17,6 +20,8 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter {
     private final MoviesRepository mRepository;
 
     private final MovieDetailsContract.View mView;
+
+    private static List<Trailer> mTrailers;
 
     public MovieDetailsPresenter(MoviesRepository repository, MovieDetailsContract.View view) {
         mRepository = repository;
@@ -62,6 +67,7 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter {
             mRepository.getTrailers(movieId, new MoviesDataSource.GetTrailersCallback() {
                 @Override
                 public void onTrailersLoaded(List<Trailer> trailers) {
+                    mTrailers = trailers;
                     mView.showTrailers(trailers);
                 }
 
@@ -73,5 +79,11 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter {
         } else {
             mView.showError("You are not connected to the internet");
         }
+    }
+
+    @Override
+    public void onTrailerSelected(int position) {
+        Uri trailerUri = NetworkHelper.getInstance().getYoutubeVideoUri(mTrailers.get(position).getId());
+        mView.playTrailer(trailerUri);
     }
 }

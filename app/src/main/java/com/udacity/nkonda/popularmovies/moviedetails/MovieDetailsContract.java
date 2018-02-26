@@ -1,5 +1,7 @@
 package com.udacity.nkonda.popularmovies.moviedetails;
 
+import android.net.Uri;
+
 import com.udacity.nkonda.popularmovies.BasePresenter;
 import com.udacity.nkonda.popularmovies.BaseView;
 import com.udacity.nkonda.popularmovies.data.MovieDetails;
@@ -23,6 +25,8 @@ public interface MovieDetailsContract {
         void showMovieDetails(MovieDetails movieDetails);
 
         void showTrailers(List<Trailer> trailers);
+
+        void playTrailer(Uri trailerUri);
     }
 
     interface Presenter extends BasePresenter {
@@ -30,5 +34,7 @@ public interface MovieDetailsContract {
         void load(int movieId);
 
         void loadTrailers(int movieId);
+
+        void onTrailerSelected(int position);
     }
 }
