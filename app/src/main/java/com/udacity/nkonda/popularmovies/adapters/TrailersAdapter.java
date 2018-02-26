@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.udacity.nkonda.popularmovies.R;
@@ -37,7 +36,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
     @Override
     public void onBindViewHolder(TrailersViewHolder holder, int position) {
-        holder.bind(mContext, position);
+        holder.bind(position);
     }
 
     @Override
@@ -59,7 +58,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Context context, int position) {
+        public void bind(int position) {
             tvTrailerName.setText(mTrailers.get(position).getName());
         }
 

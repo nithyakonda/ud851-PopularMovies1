@@ -101,7 +101,7 @@
                     android:scrollbars="vertical"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                     app:ptv_placeholderColor="@color/placeholder_text"
-                    app:ptv_sampleText="@string/movie_details_plot_synopsis_label"/>
+                    app:ptv_sampleText="@string/dummy_text"/>
             </LinearLayout>
         </LinearLayout>
         <TextView
