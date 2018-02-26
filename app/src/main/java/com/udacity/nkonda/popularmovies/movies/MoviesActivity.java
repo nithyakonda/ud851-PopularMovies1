@@ -18,6 +18,7 @@ import com.github.rafaelcrz.android_endless_scroll_lib.ScrollEndless;
 import com.squareup.picasso.Picasso;
 import com.udacity.nkonda.popularmovies.BaseActivity;
 import com.udacity.nkonda.popularmovies.R;
+import com.udacity.nkonda.popularmovies.adapters.MovieListAdapter;
 import com.udacity.nkonda.popularmovies.data.Movie;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
 import com.udacity.nkonda.popularmovies.moviedetails.MovieDetailsActivity;
