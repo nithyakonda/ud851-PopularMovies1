@@ -39,7 +39,7 @@ public interface MoviesDataSource {
 
     interface GetReviewsCallback {
 
-        void onReviewsLoaded(List<Review> reviews);
+        void onReviewsLoaded(List<Review> reviews, int totalPages);
 
         void onDataNotAvailable();
     }
@@ -50,5 +50,5 @@ public interface MoviesDataSource {
 
     void getTrailers(@NonNull int movieId, @NonNull GetTrailersCallback callback);
 
-    void getReviews(@NonNull int movieId, @NonNull GetReviewsCallback callback);
+    void getReviews(@NonNull int movieId, int pageNo, @NonNull GetReviewsCallback callback);
 }

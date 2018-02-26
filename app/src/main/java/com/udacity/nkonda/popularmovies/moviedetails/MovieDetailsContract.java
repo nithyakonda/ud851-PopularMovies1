@@ -5,6 +5,7 @@ import android.net.Uri;
 import com.udacity.nkonda.popularmovies.BasePresenter;
 import com.udacity.nkonda.popularmovies.BaseView;
 import com.udacity.nkonda.popularmovies.data.MovieDetails;
+import com.udacity.nkonda.popularmovies.data.Review;
 import com.udacity.nkonda.popularmovies.data.Trailer;
 
 import java.util.List;
@@ -26,6 +27,8 @@ public interface MovieDetailsContract {
 
         void showTrailers(List<Trailer> trailers);
 
+        void showReviews(List<Review> reviews, int currentPage, int totalPages);
+
         void playTrailer(Uri trailerUri);
     }
 
@@ -35,6 +38,12 @@ public interface MovieDetailsContract {
 
         void loadTrailers(int movieId);
 
+        void loadReviews(int movieId);
+
         void onTrailerSelected(int position);
+
+        void onNextButtonClicked();
+
+        void onBackButtonClicked();
     }
 }

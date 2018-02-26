@@ -104,9 +104,12 @@ public class NetworkHelper {
         return appendApiKeyParamTo(trailersUrl);
     }
 
-    public URL getReviewsUrl(int movieId) {
+    public URL getReviewsUrl(int movieId, int page) {
         String reviewsUrl = String.format(TMDB_REVIEWS_URL, movieId);
-        return appendApiKeyParamTo(reviewsUrl);
+        Uri uri = getUriWithApiKey(reviewsUrl).buildUpon()
+                .appendQueryParameter(PARAM_PAGE, String.valueOf(page))
+                .build();
+        return convertUriToUrl(uri);
     }
 
     public Uri getYoutubeVideoUri(String videoId) {

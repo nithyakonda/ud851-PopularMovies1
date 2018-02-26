@@ -34,10 +34,10 @@ public class JsonHelper {
     private static final String JSONKEY_REVIEW_AUTHOR = "author";
     private static final String JSONKEY_REVIEW_CONTENT = "content";
 
-    public static int getTotalPages(String moviesListJsonStr) {
+    public static int getTotalPages(String listJsonStr) {
         int totalPages = 0;
         try {
-            JSONObject responseJson = new JSONObject(moviesListJsonStr);
+            JSONObject responseJson = new JSONObject(listJsonStr);
             totalPages = responseJson.getInt(JSONKEY_TOTAL_PAGES);
         } catch (JSONException e) {
             e.printStackTrace();

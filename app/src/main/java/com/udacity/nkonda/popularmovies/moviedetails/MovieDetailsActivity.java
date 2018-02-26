@@ -4,29 +4,36 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.rafaelcrz.android_endless_scroll_lib.ScrollEndless;
 import com.squareup.picasso.Picasso;
 import com.udacity.nkonda.popularmovies.BaseActivity;
 import com.udacity.nkonda.popularmovies.R;
+import com.udacity.nkonda.popularmovies.adapters.ReviewsAdapter;
 import com.udacity.nkonda.popularmovies.adapters.TrailersAdapter;
 import com.udacity.nkonda.popularmovies.data.MovieDetails;
+import com.udacity.nkonda.popularmovies.data.Review;
 import com.udacity.nkonda.popularmovies.data.Trailer;
 import com.udacity.nkonda.popularmovies.data.source.MoviesRepository;
 import com.udacity.nkonda.popularmovies.utils.NetworkHelper;
 
 import java.util.List;
 
-public class MovieDetailsActivity extends BaseActivity implements MovieDetailsContract.View{
+public class MovieDetailsActivity extends BaseActivity
+        implements MovieDetailsContract.View,
+                   View.OnClickListener{
     private static final String TAG = "PM_MovieDetailsActivity";
     private static final String PARAM_MOVIE_ID = "PARAM_MOVIE_ID";
 
@@ -39,10 +46,14 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsCo
     TextView mTvReleaseDate;
     TextView mTvRating;
     TextView mTvPlotSynopsis;
+    TextView mTvCurrentPage;
+    TextView mTvTotalPages;
     RecyclerView mRvTrailersList;
+    RecyclerView mRvReviewsList;
 
     MovieDetailsPresenter mPresenter;
     TrailersAdapter mTrailersAdapter;
+    ReviewsAdapter mReviewsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +68,12 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsCo
         mTvRating = findViewById(R.id.tv_rating);
         mTvPlotSynopsis = findViewById(R.id.tv_plot_synopsis);
         mRvTrailersList = findViewById(R.id.rv_trailer_list);
+        mRvReviewsList = findViewById(R.id.rv_review_list);
+        mTvCurrentPage = findViewById(R.id.tv_current_page);
+        mTvTotalPages = findViewById(R.id.tv_total_pages);
+
+        findViewById(R.id.btn_back).setOnClickListener(this);
+        findViewById(R.id.btn_next).setOnClickListener(this);
 
         mTvPlotSynopsis.setMovementMethod(new ScrollingMovementMethod());
         RecyclerView.LayoutManager trailersLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -70,13 +87,31 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsCo
         });
         mRvTrailersList.setAdapter(mTrailersAdapter);
 
+        RecyclerView.LayoutManager reviewsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRvReviewsList.setLayoutManager(reviewsLayoutManager);
+        mReviewsAdapter = new ReviewsAdapter();
+        mRvReviewsList.setAdapter(mReviewsAdapter);
+
         mPresenter = new MovieDetailsPresenter(MoviesRepository.getInstance(), this);
 
         if (getIntent() != null && getIntent().hasExtra(PARAM_MOVIE_ID)) {
             movieId = getIntent().getIntExtra(PARAM_MOVIE_ID, -1);
             mPresenter.load(movieId);
             mPresenter.loadTrailers(movieId);
+            mPresenter.loadReviews(movieId);
             Log.i(TAG, "Selected movie id::" + movieId);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_back:
+                mPresenter.onBackButtonClicked();
+                break;
+            case R.id.btn_next:
+                mPresenter.onNextButtonClicked();
+                break;
         }
     }
 
@@ -90,8 +125,6 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsCo
     public void hideProgress() {
         mPbIndicator.setVisibility(View.INVISIBLE);
     }
-
-
 
     @Override
     public void showError(String errorMsg) {
@@ -135,6 +168,14 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsCo
     public void showTrailers(List<Trailer> trailers) {
         mTrailersAdapter.setItems(trailers);
         mTrailersAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showReviews(List<Review> reviews, int currentPage, int totalPages) {
+        mTvCurrentPage.setText(String.valueOf(currentPage));
+        mTvTotalPages.setText(String.valueOf(totalPages));
+        mReviewsAdapter.setItems(reviews);
+        mReviewsAdapter.notifyDataSetChanged();
     }
 
     @Override

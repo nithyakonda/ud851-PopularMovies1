@@ -90,7 +90,7 @@
                         android:layout_weight="1"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         app:ptv_placeholderColor="@color/placeholder_text"
-                        app:ptv_sampleText="@string/movie_details_plot_synopsis_label"/>
+                        app:ptv_sampleText="@string/dummy_text"/>
                 </LinearLayout>
                 <TextView
                     android:layout_width="wrap_content"
@@ -110,10 +110,10 @@
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"/>
-                <android.support.v7.widget.RecyclerView
+                <include
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rv_review_list"/>
+                    layout="@layout/reviews_layout"/>
             </LinearLayout>
         </FrameLayout>
     </ScrollView>

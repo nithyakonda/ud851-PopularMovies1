@@ -103,8 +103,8 @@ public class MoviesRepository implements MoviesDataSource {
     }
 
     @Override
-    public void getReviews(@NonNull int movieId, @NonNull final GetReviewsCallback callback) {
-        URL reviewsUrl = mNetworkHelper.getReviewsUrl(movieId);
+    public void getReviews(@NonNull int movieId, int pageNo, @NonNull final GetReviewsCallback callback) {
+        URL reviewsUrl = mNetworkHelper.getReviewsUrl(movieId, pageNo);
         mNetworkHelper.startHttpRequestTask(reviewsUrl,
                 new NetworkHelper.OnHttpResponseListener() {
                     @Override
@@ -112,11 +112,16 @@ public class MoviesRepository implements MoviesDataSource {
                         if (httpResponse == null) {
                             callback.onDataNotAvailable();
                         } else {
-                            List<Review> reviews = JsonHelper.parseReviewsJson(httpResponse);
-                            if (reviews == null) {
-                                callback.onDataNotAvailable();
+                            int totalPages = JsonHelper.getTotalPages(httpResponse);
+                            if (totalPages > 0) {
+                                List<Review> reviews = JsonHelper.parseReviewsJson(httpResponse);
+                                if (reviews == null) {
+                                    callback.onDataNotAvailable();
+                                } else {
+                                    callback.onReviewsLoaded(reviews, totalPages);
+                                }
                             } else {
-                                callback.onReviewsLoaded(reviews);
+                                callback.onDataNotAvailable();
                             }
                         }
                     }
