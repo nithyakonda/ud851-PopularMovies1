@@ -126,4 +126,9 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter {
         mLastPageNumber++;
         loadReviews(mMovieId);
     }
+
+    @Override
+    public void saveToFavourites(int movieId) {
+
+    }
 }

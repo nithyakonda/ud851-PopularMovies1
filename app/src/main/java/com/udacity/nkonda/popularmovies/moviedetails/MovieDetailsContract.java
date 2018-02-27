@@ -45,5 +45,7 @@ public interface MovieDetailsContract {
         void onNextButtonClicked();
 
         void onBackButtonClicked();
+
+        void saveToFavourites(int movieId);
     }
 }

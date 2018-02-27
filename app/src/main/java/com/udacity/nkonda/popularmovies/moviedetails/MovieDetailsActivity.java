@@ -4,12 +4,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -104,6 +108,25 @@ public class MovieDetailsActivity extends BaseActivity
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            NavUtils.navigateUpFromSameTask(this);
+        }
+        if (item.getItemId() == R.id.action_favourite) {
+            mPresenter.saveToFavourites(movieId);
+            item.setIcon(R.drawable.ic_action_favourite_on);
+        }
+        return true;
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_back:
@@ -153,6 +176,7 @@ public class MovieDetailsActivity extends BaseActivity
     @Override
     public void showMovieDetails(MovieDetails movieDetails) {
         mContentLayout.setVisibility(View.VISIBLE);
+        setTitle(movieDetails.getOriginalTitle());
         String url = NetworkHelper.getInstance().getUrl(movieDetails.getPosterPath());
         Picasso.with(this)
                 .load(url)
