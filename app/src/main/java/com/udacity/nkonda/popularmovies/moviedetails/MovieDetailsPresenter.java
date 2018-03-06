@@ -3,6 +3,7 @@ package com.udacity.nkonda.popularmovies.moviedetails;
 import android.net.Uri;
 
 import com.udacity.nkonda.popularmovies.BaseState;
+import com.udacity.nkonda.popularmovies.data.Movie;
 import com.udacity.nkonda.popularmovies.data.MovieDetails;
 import com.udacity.nkonda.popularmovies.data.Review;
 import com.udacity.nkonda.popularmovies.data.Trailer;
@@ -27,6 +28,7 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter {
 
     private static int mLastPageNumber = mDefaultPageNumber;
     private static int mMovieId;
+    private static MovieDetails sMovieDetails;
 
     public MovieDetailsPresenter(MoviesRepository repository, MovieDetailsContract.View view) {
         mRepository = repository;
@@ -52,7 +54,15 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter {
             mRepository.getMovieDetails(movieId, new MoviesDataSource.GetMovieDetailsCallback() {
                 @Override
                 public void onMovieDetailsLoaded(MovieDetails movieDetails) {
+                    sMovieDetails = movieDetails;
                     mView.hideProgress();
+                    mRepository.findFavoriteMovie(mMovieId, new MoviesDataSource.FindFavoriteMovieCallback() {
+                        @Override
+                        public void onMovieFound(boolean isFavorite) {
+                            sMovieDetails.setFavorite(isFavorite);
+                            mView.markAsFavorite(isFavorite);
+                        }
+                    });
                     mView.showMovieDetails(movieDetails);
                 }
 
@@ -128,7 +138,12 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter {
     }
 
     @Override
-    public void saveToFavourites(int movieId) {
-
+    public void onFavoriteButtonClicked(int movieId) {
+        if (sMovieDetails.isFavorite()) {
+            mRepository.removeFavoriteMovie(movieId);
+        } else {
+            mRepository.addFavoriteMovie(new Movie(movieId, sMovieDetails.getOriginalTitle()));
+        }
+        mView.markAsFavorite(!sMovieDetails.isFavorite());
     }
 }

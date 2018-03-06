@@ -30,6 +30,8 @@ public interface MovieDetailsContract {
         void showReviews(List<Review> reviews, int currentPage, int totalPages);
 
         void playTrailer(Uri trailerUri);
+
+        void markAsFavorite(boolean isFavorite);
     }
 
     interface Presenter extends BasePresenter {
@@ -46,6 +48,6 @@ public interface MovieDetailsContract {
 
         void onBackButtonClicked();
 
-        void saveToFavourites(int movieId);
+        void onFavoriteButtonClicked(int movieId);
     }
 }

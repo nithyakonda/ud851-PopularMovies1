@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,13 +14,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.github.rafaelcrz.android_endless_scroll_lib.ScrollEndless;
 import com.squareup.picasso.Picasso;
 import com.udacity.nkonda.popularmovies.BaseActivity;
 import com.udacity.nkonda.popularmovies.R;
@@ -54,6 +51,7 @@ public class MovieDetailsActivity extends BaseActivity
     TextView mTvTotalPages;
     RecyclerView mRvTrailersList;
     RecyclerView mRvReviewsList;
+    MenuItem mFavoriteMenuItem;
 
     MovieDetailsPresenter mPresenter;
     TrailersAdapter mTrailersAdapter;
@@ -96,7 +94,7 @@ public class MovieDetailsActivity extends BaseActivity
         mReviewsAdapter = new ReviewsAdapter();
         mRvReviewsList.setAdapter(mReviewsAdapter);
 
-        mPresenter = new MovieDetailsPresenter(MoviesRepository.getInstance(), this);
+        mPresenter = new MovieDetailsPresenter(MoviesRepository.getInstance(this), this);
 
         if (getIntent() != null && getIntent().hasExtra(PARAM_MOVIE_ID)) {
             movieId = getIntent().getIntExtra(PARAM_MOVIE_ID, -1);
@@ -111,6 +109,7 @@ public class MovieDetailsActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.detail, menu);
+        mFavoriteMenuItem = menu.findItem(R.id.action_favourite);
         return true;
     }
 
@@ -120,8 +119,7 @@ public class MovieDetailsActivity extends BaseActivity
             NavUtils.navigateUpFromSameTask(this);
         }
         if (item.getItemId() == R.id.action_favourite) {
-            mPresenter.saveToFavourites(movieId);
-            item.setIcon(R.drawable.ic_action_favourite_on);
+            mPresenter.onFavoriteButtonClicked(movieId);
         }
         return true;
     }
@@ -206,5 +204,16 @@ public class MovieDetailsActivity extends BaseActivity
     public void playTrailer(Uri trailerUri) {
         Intent intent = new Intent(Intent.ACTION_VIEW, trailerUri);
         startActivity(intent);
+    }
+
+    @Override
+    public void markAsFavorite(boolean isFavorite) {
+        if (mFavoriteMenuItem != null) {
+            if (isFavorite) {
+                mFavoriteMenuItem.setIcon(R.drawable.ic_action_favourite_on);
+            } else {
+                mFavoriteMenuItem.setIcon(R.drawable.ic_action_favourite_off);
+            }
+        }
     }
 }

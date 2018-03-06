@@ -28,6 +28,13 @@
         </activity>
         <activity android:name=".BaseActivity">
         </activity>
+
+        <provider
+            android:name=".data.sqlite.MoviesProvider"
+            android:authorities="com.udacity.nkonda.popularmovies"
+            android:enabled="true"
+            android:exported="false">
+        </provider>
     </application>
 
 </manifest>

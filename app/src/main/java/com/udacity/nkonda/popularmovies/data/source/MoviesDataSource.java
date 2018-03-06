@@ -44,6 +44,17 @@ public interface MoviesDataSource {
         void onDataNotAvailable();
     }
 
+    interface GetFavoriteMoviesCallback {
+
+        void onMoviesLoaded(List<Movie> movies);
+
+        void onDataNotAvailable();
+    }
+
+    interface FindFavoriteMovieCallback {
+        void onMovieFound(boolean isFavorite);
+    }
+
     void getMovies(SortOrder sortOrder, int pageNo, @NonNull GetMoviesCallback callback);
 
     void getMovieDetails(@NonNull int movieId, @NonNull GetMovieDetailsCallback callback);
@@ -51,4 +62,12 @@ public interface MoviesDataSource {
     void getTrailers(@NonNull int movieId, @NonNull GetTrailersCallback callback);
 
     void getReviews(@NonNull int movieId, int pageNo, @NonNull GetReviewsCallback callback);
+
+    void getFavoriteMovies(@NonNull GetFavoriteMoviesCallback callback);
+
+    void findFavoriteMovie(int movieId, @NonNull FindFavoriteMovieCallback callback);
+
+    void addFavoriteMovie(Movie movie);
+
+    void removeFavoriteMovie(int movieId);
 }

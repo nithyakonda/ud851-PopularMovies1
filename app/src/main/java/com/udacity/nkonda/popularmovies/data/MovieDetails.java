@@ -10,6 +10,7 @@ public class MovieDetails {
     private String plotSynopsis;
     private double rating;
     private String releaseDate;
+    private boolean favorite;
 
     public MovieDetails(String originalTitle, String posterPath, String plotSynopsis, double rating, String releaseDate) {
         this.originalTitle = originalTitle;
@@ -37,6 +38,14 @@ public class MovieDetails {
 
     public String getReleaseDate() {
         return releaseDate;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 
     @Override

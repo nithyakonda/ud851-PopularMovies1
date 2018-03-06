@@ -86,7 +86,7 @@ public class MoviesActivity extends BaseActivity implements MoviesContract.View{
             }
         });
 
-        mPresenter = new MoviesPresenter(MoviesRepository.getInstance(), this);
+        mPresenter = new MoviesPresenter(MoviesRepository.getInstance(this), this);
 
         if (inState != null) {
             mState = new MoviesState(
