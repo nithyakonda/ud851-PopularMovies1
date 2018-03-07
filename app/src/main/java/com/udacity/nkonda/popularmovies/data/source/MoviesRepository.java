@@ -153,7 +153,7 @@ public class MoviesRepository implements MoviesDataSource {
         QueryDbAsyncTask queryDbTask = new QueryDbAsyncTask(mContext, uri, new GetFavoriteMoviesCallback() {
             @Override
             public void onMoviesLoaded(List<Movie> movies) {
-                if (movies.size() == 1) {
+                if (movies.size() != 0) {
                     callback.onMovieFound(true);
                 } else {
                     callback.onMovieFound(false);
