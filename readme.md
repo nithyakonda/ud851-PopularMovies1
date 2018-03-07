@@ -1,9 +1,8 @@
 # Popular Movies
 
 ## Usage
-Please add your API KEY for TMDB in build.gradle file <br>
-Eg:<br>
-buildConfigField "String", "API_KEY", '"Set you API Key here"'
+Please add your API KEY for TMDB in ud851-PopularMovies1/private.properties file as follows
+API_KEY = "my api key"
 
 ## Libraries Used
 * Picasso (http://square.github.io/picasso/)
