@@ -119,7 +119,7 @@ public class MovieDetailsActivity extends BaseActivity
             NavUtils.navigateUpFromSameTask(this);
         }
         if (item.getItemId() == R.id.action_favourite) {
-            mPresenter.onFavoriteButtonClicked(movieId);
+            mPresenter.onFavoriteButtonClicked();
         }
         return true;
     }

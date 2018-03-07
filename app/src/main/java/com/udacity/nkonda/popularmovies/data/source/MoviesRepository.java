@@ -173,6 +173,7 @@ public class MoviesRepository implements MoviesDataSource {
         final ContentValues contentValues = new ContentValues();
         contentValues.put(MoviesDbContract.MovieEntry.COLUMN_MOVIE_ID, movie.getId());
         contentValues.put(MoviesDbContract.MovieEntry.COLUMN_MOVIE_NAME, movie.getTitle());
+        contentValues.put(MoviesDbContract.MovieEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
         Runner.getInstance().runOnBackgroundThread(new Runnable() {
             @Override
             public void run() {

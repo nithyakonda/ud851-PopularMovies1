@@ -6,5 +6,6 @@ package com.udacity.nkonda.popularmovies.movies;
 
 public enum SortOrder {
     Popular,
-    TopRated
+    TopRated,
+    Favorite
 }

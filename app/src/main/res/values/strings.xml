@@ -4,6 +4,7 @@
     <string name="action_sort_title">Sort</string>
     <string name="action_sort_popularity_title">By Popularity</string>
     <string name="action_sort_rating_title">By Rating</string>
+    <string name="action_sort_favorite_title">By Favorites</string>
 
     <string name="error_dialog_title">Oops!</string>
     <string name="error_dialog_button_label">Retry</string>

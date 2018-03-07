@@ -58,24 +58,39 @@ public class MoviesPresenter implements MoviesContract.Presenter {
 
     @Override
     public void load() {
-        if (mView.isOnline()) {
-            mView.showProgress();
-
-            mRepository.getMovies(mLastSortOrder, mLastPageNumber, new MoviesDataSource.GetMoviesCallback() {
+        if (mLastSortOrder == SortOrder.Favorite) {
+            mRepository.getFavoriteMovies(new MoviesDataSource.GetFavoriteMoviesCallback() {
                 @Override
-                public void onMoviesLoaded(List<Movie> movies, int totalPages) {
+                public void onMoviesLoaded(List<Movie> movies) {
                     mMovies = movies;
                     mView.hideProgress();
-                    mView.showResults(mMovies, totalPages);
+                    mView.showResults(mMovies, 1);
                 }
 
                 @Override
                 public void onDataNotAvailable() {
-                    mView.showError("Something went wrong.");
+                    mView.showError("You do not have any favorite movies!");
                 }
             });
         } else {
-            mView.showError("You are not connected to the internet");
+            if (mView.isOnline()) {
+                mView.showProgress();
+                mRepository.getMovies(mLastSortOrder, mLastPageNumber, new MoviesDataSource.GetMoviesCallback() {
+                    @Override
+                    public void onMoviesLoaded(List<Movie> movies, int totalPages) {
+                        mMovies = movies;
+                        mView.hideProgress();
+                        mView.showResults(mMovies, totalPages);
+                    }
+
+                    @Override
+                    public void onDataNotAvailable() {
+                        mView.showError("Something went wrong.");
+                    }
+                });
+            } else {
+                mView.showError("You are not connected to the internet");
+            }
         }
     }
 

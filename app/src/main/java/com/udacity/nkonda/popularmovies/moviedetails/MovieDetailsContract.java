@@ -48,6 +48,6 @@ public interface MovieDetailsContract {
 
         void onBackButtonClicked();
 
-        void onFavoriteButtonClicked(int movieId);
+        void onFavoriteButtonClicked();
     }
 }

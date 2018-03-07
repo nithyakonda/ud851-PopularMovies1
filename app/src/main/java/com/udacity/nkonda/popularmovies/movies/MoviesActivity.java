@@ -132,6 +132,9 @@ public class MoviesActivity extends BaseActivity implements MoviesContract.View{
             case R.id.action_sort_rating:
                 newSortOrder = SortOrder.TopRated;
                 break;
+            case R.id.action_sort_favorite:
+                newSortOrder = SortOrder.Favorite;
+                break;
             default:
             return super.onOptionsItemSelected(item);
         }

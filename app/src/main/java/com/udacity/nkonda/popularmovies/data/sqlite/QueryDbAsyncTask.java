@@ -59,14 +59,16 @@ public class QueryDbAsyncTask extends AsyncTask<Void, Void, Cursor> {
     private List<Movie> getMovieListFromCursor(Cursor cursor) {
         List<Movie> favoriteMovies = new ArrayList<>();
         Movie movie;
-        int movieNameIndex = cursor.getColumnIndex(MoviesDbContract.MovieEntry.COLUMN_MOVIE_ID);
-        int movieIdIndex = cursor.getColumnIndex(MoviesDbContract.MovieEntry.COLUMN_MOVIE_NAME);
+        int movieNameIndex = cursor.getColumnIndex(MoviesDbContract.MovieEntry.COLUMN_MOVIE_NAME);
+        int movieIdIndex = cursor.getColumnIndex(MoviesDbContract.MovieEntry.COLUMN_MOVIE_ID);
+        int posterPathIndex = cursor.getColumnIndex(MoviesDbContract.MovieEntry.COLUMN_POSTER_PATH);
         for (int i = 0; i < cursor.getCount(); i++) {
             cursor.moveToPosition(i);
 
-            int id = cursor.getInt(movieIdIndex);
+            String id = cursor.getString(movieIdIndex);
             String name = cursor.getString(movieNameIndex);
-            movie = new Movie(id, name);
+            String posterPath = cursor.getString(posterPathIndex);
+            movie = new Movie(Integer.parseInt(id), name, posterPath);
             movie.setFavorite(true);
             favoriteMovies.add(movie);
         }

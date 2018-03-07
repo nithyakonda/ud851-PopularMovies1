@@ -138,11 +138,13 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter {
     }
 
     @Override
-    public void onFavoriteButtonClicked(int movieId) {
+    public void onFavoriteButtonClicked() {
         if (sMovieDetails.isFavorite()) {
-            mRepository.removeFavoriteMovie(movieId);
+            mRepository.removeFavoriteMovie(mMovieId);
         } else {
-            mRepository.addFavoriteMovie(new Movie(movieId, sMovieDetails.getOriginalTitle()));
+            mRepository.addFavoriteMovie(new Movie(mMovieId,
+                    sMovieDetails.getOriginalTitle(),
+                    sMovieDetails.getPosterPath()));
         }
         mView.markAsFavorite(!sMovieDetails.isFavorite());
     }
